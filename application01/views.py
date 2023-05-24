@@ -32,3 +32,6 @@ def orm(request):
     from application01.models import StudentInfo
     data_list = StudentInfo.objects.filter(name='Clark')
     return HttpResponse([[i.name, i.height, i.weight, i.age] for i in data_list])
+
+def test(request):
+    return render(request,'test.html')

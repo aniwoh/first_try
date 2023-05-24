@@ -22,7 +22,9 @@ from login_app import views as login_view
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', login_view.login_view, name='login'),
+    path('register/',login_view.register,name='register'),
     path('index/',views.index),
     path('search/',views.search),
     path('orm/',views.orm),
+    path('test/',views.test),
 ]

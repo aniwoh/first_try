@@ -86,23 +86,8 @@
 <body>
     <div class="container">
         <div class="login-wrapper">
-            <div class="header">登录页面</div>
-            <div class="form-wrapper">
-                <form method="POST" action="{% url 'login' %}">
-                    <!--为了解决Django自带的验证机制，如果没有这个，提交之后就会报forbidden-->
-                    {% csrf_token %}
-                    <input type="text" name="username" placeholder="Username" required class="input-item"><br>
-                    <input type="password" name="password" placeholder="Password" required class="input-item"><br>
-                    <input type="submit" value="Login" class="btn">
-                </form>
-                {% if error_message %}
-                <p class="login-error">{{ error_message }}</p>
-                {% endif %}
-            </div>
-            <div class="msg">
-                还没有账号?
-                <a href="./register">加入我们</a>
-            </div>
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 </body>

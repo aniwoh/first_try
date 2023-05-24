@@ -1,0 +1,22 @@
+{% extends "layout-login.html" %}
+{% block content %}
+<div class="header">加入我们</div>
+<div class="form-wrapper">
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="input-item">
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+        </div>
+        <div class="input-item">
+            <label for="{{ form.password1.id_for_label }}"></label>
+            <label for="{{ form.password1 }}"></label>
+        </div>
+        <div class="input-item">
+            <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit" class="btn">注册</button>
+    </form>
+</div>
+{% endblock %}
