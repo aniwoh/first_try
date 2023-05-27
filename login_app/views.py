@@ -26,11 +26,15 @@ def login_view(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()  # 保存用户数据到数据库
+        username = request.POST['username']
+        password = request.POST['password1']
+        confire_password=request.POST['password2']
+        if password==confire_password:
+            user = User(username=username, password=password)
+            user.save()
             return redirect('login')  # 注册成功后重定向到登录页面
-    else:
-        form = UserCreationForm()
-
-    return render(request, 'register.html', {'form': form})
+        else:
+            error_message = "两次密码不一致"
+            return render(request, 'register.html', {'error_message': error_message})
+    
+    return render(request, 'register.html')
