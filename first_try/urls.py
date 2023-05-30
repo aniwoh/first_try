@@ -27,5 +27,6 @@ urlpatterns = [
     path('search/',views.search),
     path('orm/',views.orm),
     path('test/',views.test),
+    path('test1/',views.test1),
     path('', RedirectView.as_view(url='/user')),
 ]

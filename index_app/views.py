@@ -34,4 +34,7 @@ def orm(request):
     return HttpResponse([[i.name, i.height, i.weight, i.age] for i in data_list])
 
 def test(request):
-    return render(request,'test.html')
+    return render(request,'test/test.html')
+
+def test1(request):
+    return render(request,'test/siderbar2.html')

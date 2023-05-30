@@ -8,10 +8,8 @@
 
 body {
     height: 100vh;
-    background: linear-gradient(
-        #9fc0cf,
-        #e5edf1
-    );
+    background: linear-gradient(#9fc0cf,
+            #e5edf1);
     font-family: 'Roboto', sans-serif;
 }
 
@@ -21,7 +19,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background: url('../images/bg.png') no-repeat bottom;
+    background: url('../img/bg.png') no-repeat bottom;
+}
+
+.main_content {
+    width: 70%;
+    height: 100%;
+    padding-left: 10%;
+    border: red solid;
 }
 
 .container nav {
@@ -110,11 +115,9 @@ nav .list li.active i {
 
 nav .list i {
     font-size: 20px;
-    background: linear-gradient(
-        -135deg,
-        #3c3e43,
-        #838487
-    );
+    background: linear-gradient(-135deg,
+            #3c3e43,
+            #838487);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
