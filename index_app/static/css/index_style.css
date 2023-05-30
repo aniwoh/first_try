@@ -19,7 +19,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background: url('../img/bg.png') no-repeat bottom;
+    background: url('../img/88426823_p0.png') no-repeat bottom;
+    background-size: cover;
 }
 
 .main_content {
@@ -27,11 +28,12 @@ body {
     height: 100%;
     padding-left: 10%;
     border: red solid;
+    backdrop-filter: blur(10px);
 }
 
 .container nav {
     width: 100px;
-    height: min-content;
+    height: 100%;
     padding: 16px;
     /*border-radius: 12px;*/
     backdrop-filter: blur(18px);

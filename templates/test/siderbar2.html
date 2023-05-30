@@ -16,55 +16,49 @@
 </head>
 
 <body>
-    <div id="app">
-        <div class="container">
-            <nav>
-                <div class="brand">
-                    <img src="{% static 'img/profile.jpg' %}" alt="">
-                    <p>
-                        Good day,
-                        <span>{% verbatim %}
-                            {{ youradmin }}
-                            {% endverbatim %}</span>
-                    </p>
-                </div>
-                <hr class="line">
-                <ul class="list">
-                    <li class="active">
-                        <i class="fa-solid fa-home"></i>
-                        <span>Dashboard</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-user"></i>
-                        <span>Accounts</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-box"></i>
-                        <span>Orders</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-chart-simple"></i>
-                        <span>Charts</span>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-phone"></i>
-                        <span>Support</span>
-                    </li>
-                    <hr class="line">
-                    <li>
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Logout</span>
-                    </li>
-                </ul>
-
-            </nav>
-            <div class="main_content">
-                这里是正文
+    <div class="container" id="app">
+        <nav>
+            <div class="brand">
+                <img src="{% static 'img/avater_240.jpg' %}" alt="">
+                <p>
+                    Good day,
+                    <span>{% verbatim %}
+                        {{ youradmin }}
+                        {% endverbatim %}</span>
+                </p>
             </div>
-
+            <hr class="line">
+            <ul class="list">
+                <li class="active">
+                    <i class="fa-solid fa-home"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-user"></i>
+                    <span>Accounts</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-box"></i>
+                    <span>Orders</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <span>Charts</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Support</span>
+                </li>
+                <hr class="line">
+                <li>
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </li>
+            </ul>
+        </nav>
+        <div class="main_content">
+            这里是正文
         </div>
-
-    </div>
     </div>
     <script>
         var app = new Vue({
