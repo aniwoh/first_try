@@ -29,7 +29,7 @@ def login(request):
     return render(request, "login.html", {"error_msg": "用户名或密码错误"})
 
 def orm(request):
-    from application01.models import StudentInfo
+    from index_app.models import StudentInfo
     data_list = StudentInfo.objects.filter(name='Clark')
     return HttpResponse([[i.name, i.height, i.weight, i.age] for i in data_list])
 

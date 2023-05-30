@@ -6,4 +6,3 @@ class StudentInfo(models.Model):
     height = models.IntegerField()
     weight = models.IntegerField(default=100)
     age = models.IntegerField()
-    
