@@ -30,8 +30,10 @@ def register(request):
         password = request.POST['password1']
         confire_password=request.POST['password2']
         if password==confire_password:
-            user = User(username=username, password=password)
-            user.save()
+            user = User.objects.create_user(
+				username=username,
+				password=password,
+			)
             return redirect('login')  # 注册成功后重定向到登录页面
         else:
             error_message = "两次密码不一致"
