@@ -5,7 +5,7 @@
     <title>MY index</title>
     <link rel="shortcut icon" href="{% static 'img/avater_240.jpg' %}">
     <!-- Fontawesome Icons v6.2.0 -->
-    <script src="https://kit.fontawesome.com/7c8801c017.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.css" rel="stylesheet">
     <!-- Roboto Font -->
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap"
@@ -13,6 +13,8 @@
     <!-- CSS File -->
     <link rel="stylesheet" href="{% static 'css/index_style.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- markdown-it-->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
 
 </head>
 
@@ -57,8 +59,12 @@
                 </li>
             </ul>
         </nav>
-        <div class="main_content">
-            这里是正文
+        <!-- <div class="main_content">
+            间隔
+        </div> -->
+
+        <div class="markdown-content">
+            {{ markdown.content }}
         </div>
     </div>
     <script>
@@ -68,6 +74,11 @@
                 youradmin: 'aniwoh!'
             }
         })
+    </script>
+    <script>
+        var md = window.markdownit();
+        var markdownContent = document.querySelector('.markdown-content');
+        markdownContent.innerHTML = md.render(markdownContent.innerHTML);
     </script>
 </body>
 

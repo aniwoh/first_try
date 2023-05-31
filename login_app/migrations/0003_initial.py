@@ -8,17 +8,16 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('login_app', '0002_delete_user'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MarkdownFile',
+            name='Account',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('content', models.TextField()),
-                ('author', models.CharField(max_length=100)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('password', models.CharField(max_length=200)),
+                ('name', models.CharField(max_length=20)),
             ],
         ),
     ]

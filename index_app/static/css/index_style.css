@@ -20,15 +20,24 @@ body {
     align-items: center;
     justify-content: flex-start;
     background: url('../img/88426823_p0.png') no-repeat bottom;
+    backdrop-filter: blur(10px);
     background-size: cover;
 }
 
-.main_content {
-    width: 70%;
+/* .main_content {
+    width: 10%;
     height: 100%;
-    padding-left: 10%;
     border: red solid;
     backdrop-filter: blur(10px);
+} */
+
+.markdown-content {
+    width: 70%;
+    height: 100%;
+    left: 25%;
+    backdrop-filter: blur(10px);
+    position: absolute;
+    overflow: auto;
 }
 
 .container nav {
@@ -44,7 +53,7 @@ body {
 }
 
 .container nav:hover {
-    width: 320px;
+    width: 240px;
 }
 
 nav .brand {
@@ -110,6 +119,7 @@ nav .list li.active span {
 
 nav .list li.active i {
     background: none;
+    background-clip: unset;
     -webkit-background-clip: unset;
     -webkit-text-fill-color: unset;
     color: #e6ebf0;
@@ -120,6 +130,7 @@ nav .list i {
     background: linear-gradient(-135deg,
             #3c3e43,
             #838487);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
