@@ -29,11 +29,6 @@ def login(request):
         return HttpResponse("登录成功！！")
     return render(request, "login.html", {"error_msg": "用户名或密码错误"})
 
-def orm(request):
-    from index_app.models import StudentInfo
-    data_list = StudentInfo.objects.filter(name='Clark')
-    return HttpResponse([[i.name, i.height, i.weight, i.age] for i in data_list])
-
 def test(request):
     return render(request,'test/test.html')
 

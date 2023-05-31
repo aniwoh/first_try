@@ -25,7 +25,6 @@ urlpatterns = [
     path('user/',include('login_app.urls')),
     path('index/',views.index),
     path('search/',views.search),
-    path('orm/',views.orm),
     path('test/',views.test),
     path('test1/',views.test1),
     path('upload/', views.upload_view, name='upload'),
