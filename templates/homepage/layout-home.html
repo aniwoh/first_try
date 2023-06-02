@@ -28,25 +28,25 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="./list" {% if current_page == 'list' %}class="current" {% endif %}>
                     <i class="fa-solid fa-list"></i>
                     <span>文章列表</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="./data" {% if current_page == 'data' %}class="current" {% endif %}>
                     <i class="fa-solid fa-chart-line"></i>
                     <span>数据管理</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="./plugin" {% if current_page == 'plugin' %}class="current" {% endif %}>
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span>插件管理</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="./setting" {% if current_page == 'setting' %}class="current" {% endif %}>
                     <i class="fa-solid fa-gear"></i>
                     <span>系统设置</span>
                 </a>
