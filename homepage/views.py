@@ -5,4 +5,16 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def homepage(request):
-    return render(request,'homepage.html')
+    username = request.COOKIES.get('username')
+    content={
+        'username':username
+    }
+    return render(request,'homepage.html',content)
+
+def home(request):
+    username = request.COOKIES.get('username')
+    content={
+        'username':username,
+        'current_page':'home',
+    }
+    return render(request,'homepage/home.html',content)
