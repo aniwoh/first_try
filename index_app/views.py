@@ -5,7 +5,8 @@ from .models import MarkdownFilePool
 
 def index(request):
     markdown = MarkdownFilePool.objects.first()  # 获取第一个Markdown文件
-    return render(request, 'index.html', {'markdown': markdown})
+    username = request.COOKIES.get('username', 'Guest')
+    return render(request, 'index.html', {'markdown': markdown,'username': username})
 
 def test(request):
     return render(request,'test/test.html')

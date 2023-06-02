@@ -30,37 +30,39 @@
                 <img src="{% static 'img/avater_240.jpg' %}" alt="">
                 <p>
                     Good day,
-                    <span>{% verbatim %}
-                        {{ youradmin }}
-                        {% endverbatim %}</span>
+                    {% if username %}
+                    <span>{{ username }}!</span>
+                    {% else %}
+                    <span>Guest!</span>
+                    {% endif %}
                 </p>
             </div>
             <hr class="line">
             <ul class="list">
                 <li class="active">
                     <i class="fa-solid fa-home"></i>
-                    <span>Home</span>
+                    <span>Home'</span>
                 </li>
                 <li>
-                    <i class="fa-solid fa-box"></i>
-                    <span>Orders</span>
+                    <i class="fa-solid fa-list"></i>
+                    <span>Category</span>
                 </li>
                 <li>
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <span>Charts</span>
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Archive</span>
                 </li>
                 <li>
                     <i class="fa-solid fa-user"></i>
                     <span>Accounts</span>
                 </li>
                 <li>
-                    <i class="fa-solid fa-phone"></i>
-                    <span>Support</span>
+                    <i class="fa-solid fa-filter"></i>
+                    <span>Other</span>
                 </li>
                 <hr class="line">
                 <li>
                     <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Logout</span>
+                    <span><a href="{% url 'logout' %}">Logout</a></span>
                 </li>
             </ul>
         </nav>
@@ -78,14 +80,6 @@
             </div>
         </div>
     </div>
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                youradmin: 'aniwoh!'
-            }
-        })
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         var markdownContent = document.querySelector('.markdown-content');
