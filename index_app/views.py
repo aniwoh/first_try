@@ -4,6 +4,8 @@ from .models import MarkdownFilePool
 # Create your views here.
 
 def index(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     markdown = MarkdownFilePool.objects.first()  # 获取第一个Markdown文件
     username = request.COOKIES.get('username', 'Guest')
     return render(request, 'index.html', {'markdown': markdown,'username': username})

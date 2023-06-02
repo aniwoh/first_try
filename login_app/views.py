@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -37,8 +37,8 @@ def register(request):
     
     return render(request, 'register.html')
 
-def logout(request):
+def logout_view(request):
     logout(request)
-    response = redirect('index')
+    response = redirect('login')
     response.delete_cookie('username')  # 删除Cookie值
     return response
