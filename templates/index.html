@@ -30,18 +30,14 @@
                 <img src="{% static 'img/avater_240.jpg' %}" alt="">
                 <p>
                     Good day,
-                    {% if username %}
                     <span>{{ username }}!</span>
-                    {% else %}
-                    <span>Guest!</span>
-                    {% endif %}
                 </p>
             </div>
             <hr class="line">
             <ul class="list">
                 <li class="active">
                     <i class="fa-solid fa-home"></i>
-                    <span>Home'</span>
+                    <span>Home</span>
                 </li>
                 <li>
                     <i class="fa-solid fa-list"></i>
@@ -57,12 +53,17 @@
                 </li>
                 <li>
                     <i class="fa-solid fa-filter"></i>
-                    <span>Other</span>
+                    <span>Backend</span>
                 </li>
                 <hr class="line">
                 <li>
+                    {% if username == 'Guest' %}
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span><a href="{% url 'login' %}">Login</a></span>
+                    {% else %}
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span><a href="{% url 'logout' %}">Logout</a></span>
+                    {% endif %}
                 </li>
             </ul>
         </nav>

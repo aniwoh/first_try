@@ -11,7 +11,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            response = redirect('./homepage')
+            response = redirect('/homepage')
             response.set_cookie('username', username)
             return response  # 登录成功后重定向到后台
         else:
