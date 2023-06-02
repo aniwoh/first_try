@@ -13,6 +13,11 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+a {
+    text-decoration: none; /* 去除下划线 */
+    color: inherit; /* 继承父元素的颜色 */
+}
+
 .container {
     width: 100%;
     height: 100%;
