@@ -7,17 +7,11 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        
-        # if username=='aniwoh' and password=='password':
-        #     return redirect('/index')
-        # else:
-        #     error_message = "账号或密码错误"
-        #     return render(request, 'login.html', {'error_message': error_message})
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/index')  # 登录成功后重定向到主页
+            return redirect('./homepage')  # 登录成功后重定向到后台
         else:
             error_message = "账号或密码错误"
             return render(request, 'login.html', {'error_message': error_message})

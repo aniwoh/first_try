@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'index_app',
     'login_app',
+    'homepage',
     'markdownx',
 ]
 
