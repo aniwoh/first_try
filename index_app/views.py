@@ -19,7 +19,7 @@ def upload_view(request):
         markdown = MarkdownFilePool(title=title, content=content, author=author)
         markdown.save()
         
-        return redirect('/test1')
+        return redirect('/index')
     
     return render(request, 'upload.html')
 

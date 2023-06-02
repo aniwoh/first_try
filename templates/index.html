@@ -3,6 +3,7 @@
 
 <head>
     <title>MY index</title>
+    <!-- 页面图标 -->
     <link rel="shortcut icon" href="{% static 'img/avater_240.jpg' %}">
     <!-- Fontawesome Icons v6.2.0 -->
     <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.css" rel="stylesheet">
@@ -22,7 +23,7 @@
 </head>
 
 <body>
-    <div class="container" id="app">
+    <div class="container">
         <nav>
             <div class="brand">
                 <img src="{% static 'img/avater_240.jpg' %}" alt="">
@@ -66,16 +67,20 @@
             </ul>
         </nav>
         <div class="main_content">
-            <div>
-                也许可以试试editor.md
+            <div class="markdown-main">
+                <div class="markdown-title">
+                    {{markdown.title}}
+                </div>
+                <div class="markdown-author">
+                    作者:{{markdown.author}} 发表时间:{{markdown.created_at}}
+                </div>
+                <div class="markdown-content">
+                    {{ markdown.content }}
+                </div>
             </div>
-            <div class="markdown-content">
-                {{ markdown.content }}
-            </div>
-            <div>
-                <button type="button">previous</button>
-                <button>next</button>
-                <a href="../user/login">denglu</a>
+            <div class="main-footer">
+                <button type="button">上一篇</button>
+                <button type="button">下一篇</button>
             </div>
         </div>
     </div>
