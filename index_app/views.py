@@ -23,19 +23,4 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
-def upload_view(request):
-    if request.method == 'POST':
-        title = request.POST['title']
-        author = request.POST['author']
-        markdown_file = request.FILES['markdown_file']
-        
-        # 将Markdown内容读取并存储到数据库
-        content = markdown_file.read().decode('utf-8')
-        markdown = MarkdownFilePool(title=title, content=content, author=author)
-        markdown.save()
-        
-        return redirect('/homepage/list')
-    
-    return redirect('/homepage/list')
-
 

@@ -9,4 +9,5 @@ urlpatterns = [
     path('plugin',views.plugin,name='plugin'),
     path('setting',views.setting,name='setting'),
     path('', RedirectView.as_view(url='home')),
+    path('upload/', views.upload_view, name='upload'),
 ]

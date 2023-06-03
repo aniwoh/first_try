@@ -23,5 +23,4 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/index')),
     path('user/',include('login_app.urls')),
     path('homepage/',include('homepage.urls')),
-    path('upload/', views.upload_view, name='upload'),
 ]
