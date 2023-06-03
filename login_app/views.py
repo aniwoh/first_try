@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login,logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 def login_view(request):
@@ -11,14 +10,14 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            response = redirect('/homepage')
+            response = redirect('/index')
             response.set_cookie('username', username)
-            return response  # 登录成功后重定向到后台
+            return response  # 登录成功后重定向到主页
         else:
             error_message = "账号或密码错误"
             return render(request, 'login.html', {'error_message': error_message})
     
-    return render(request, 'login.html')
+    return render(request, 'login_app/login.html')
 
 def register(request):
     if request.method == 'POST':
@@ -33,9 +32,9 @@ def register(request):
             return redirect('login')  # 注册成功后重定向到登录页面
         else:
             error_message = "两次密码不一致"
-            return render(request, 'register.html', {'error_message': error_message})
+            return render(request, 'login_app/register.html', {'error_message': error_message})
     
-    return render(request, 'register.html')
+    return render(request, 'login_app/register.html')
 
 def logout_view(request):
     logout(request)
