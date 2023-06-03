@@ -1,4 +1,44 @@
 {% extends "./layout-home.html" %}
 {% block content %}
-这里是list页面的内容区,用于展示文章列表
+<link rel="stylesheet" href="{% static 'css/home_list.css' %}">
+<!--这里是文章列表页面，用于实现文章的查看与上传-->
+<div class='list-main'>
+<div class="post-list">
+    <h2 style="text-align: center;border: gray solid;border-radius: 10px;"> 文章列表</h1>
+    <table style="border-radius: 10px;">
+        <thead>
+            <tr>
+                <th style="width: 10%;">id</th>
+                <th style="width: 40%;">Title</th>
+                <th style="width: 20%;">author</style></th>
+                <th style="width: 30%;">time</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr class="list-content">
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.author }}</td>
+                <td>{{ post.created_at }}</td>
+                <!-- 其他数据字段 -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="upload">
+    <form method="POST" enctype="multipart/form-data" action="{% url 'upload' %}">
+        {% csrf_token %}
+        <label for="title">Title:</label>
+        <input type="text" name="title" required><br>
+        <label for="author">Author:</label>
+        <input type="text" name="author" required><br>
+        <label for="markdown_file">Markdown File:</label>
+        <input type="file" name="markdown_file" required><br>
+        <input type="submit" value="Upload">
+    </form>
+</div>
+</div>
 {% endblock %}

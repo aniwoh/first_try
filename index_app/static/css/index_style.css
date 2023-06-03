@@ -110,7 +110,6 @@ nav a {
     width: 100px;
     height: 100%;
     padding: 16px;
-    /*border-radius: 12px;*/
     backdrop-filter: blur(18px);
     background: rgba(230, 235, 240, .7);
     border: 2px solid rgba(230, 235, 240, .7);

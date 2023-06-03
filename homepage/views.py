@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from index_app.models import MarkdownFilePool
 
 @login_required
 def home(request):
@@ -12,10 +13,12 @@ def home(request):
 
 @login_required
 def list(request):
+    posts = MarkdownFilePool.objects.all()
     username = request.COOKIES.get('username')
     content={
         'username':username,
         'current_page':'list',
+        'posts':posts
     }
     return render(request,'homepage/list.html',content)
 
