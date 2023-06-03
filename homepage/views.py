@@ -4,14 +4,6 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 @login_required
-def homepage(request):
-    username = request.COOKIES.get('username')
-    content={
-        'username':username
-    }
-    return render(request,'homepage.html',content)
-
-@login_required
 def home(request):
     username = request.COOKIES.get('username')
     content={
