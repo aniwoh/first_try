@@ -19,7 +19,7 @@ from django.views.generic import RedirectView
 from index_app import views
 
 urlpatterns = [
-    path('index/',views.index),
+    path('index/',views.index,name='index'),
     path('', RedirectView.as_view(url='/index')),
     path('user/',include('login_app.urls')),
     path('homepage/',include('homepage.urls')),
