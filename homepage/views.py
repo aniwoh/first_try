@@ -63,4 +63,4 @@ def upload_view(request):
         return redirect('/homepage/list')
     
     return redirect('/homepage/list')
-    
+
