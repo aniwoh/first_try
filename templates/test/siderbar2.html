@@ -17,8 +17,8 @@
     <!-- markdown-it-->
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
     <!--cdn引用highlight并调用-->
-    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/a11y-dark.min.css" rel="stylesheet">
-    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <link href="{% static 'highlight/styles/monokai-sublime.min.css' %}" rel="stylesheet">
+    <script src="{% static 'highlight/highlight.min.js' %}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
 </head>
@@ -65,9 +65,6 @@
             </ul>
         </nav>
         <div class="main_content">
-            <div>
-                也许可以试试editor.md
-            </div>
             <div class="markdown-content">
                 {{ markdown.content }}
             </div>
