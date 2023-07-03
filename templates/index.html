@@ -13,12 +13,14 @@
         rel="stylesheet">
     <!-- CSS File -->
     <link rel="stylesheet" href="{% static 'css/index_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/test.css' %}">
     <!-- markdown-it-->
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
     <!--cdn引用highlight并调用-->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-    <script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.7.0/styles/stackoverflow-dark.min.css" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/showdown/2.1.0/showdown.js"></script>
 
 </head>
 
@@ -74,8 +76,8 @@
                 <div class="markdown-author">
                     作者:{{markdown.author}} 发表时间:{{markdown.created_at}}
                 </div>
-                <div class="markdown-content">
-                    {{ markdown.content }}
+                <div class="content">
+                    {{ markdown.content|safe|slice:"1:" }}
                 </div>
             </div>
             <div class="main-footer">
@@ -92,16 +94,11 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        var markdownContent = document.querySelector('.markdown-content');
-        marked.setOptions({
-            highlight: function (code) {
-                return hljs.highlightAuto(code).value;
-            }
-        });
-        markdownContent.innerHTML = marked.parse(markdownContent.innerHTML);
-
+        var markdownContent = document.querySelector('.content');
+        var converter = new showdown.Converter({tables:true,metadata: true,Strikethrough: true});
+        var html = converter.makeHtml(markdownContent.innerHTML);
+        markdownContent.innerHTML = html;
     </script>
 </body>
 
