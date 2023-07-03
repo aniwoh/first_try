@@ -32,13 +32,13 @@ def data(request):
     return render(request,'homepage/data.html',content)
 
 @login_required
-def plugin(request):
+def userall(request):
     username = request.COOKIES.get('username')
     content={
         'username':username,
-        'current_page':'plugin',
+        'current_page':'userall',
     }
-    return render(request,'homepage/plugin.html',content)
+    return render(request,'homepage/userall.html',content)
 
 @login_required
 def setting(request):
