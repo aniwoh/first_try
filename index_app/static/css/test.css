@@ -1,10 +1,16 @@
 .markdown-content {
     margin: 0 auto;
     font-family: "Microsoft YaHei", arial, sans-serif;
-    line-height: 1;
+    line-height: 1.8;
     border-style: solid;
     border-color: #ffcdcd;
     border-width: 1px;
+    word-wrap: break-word;
+
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
 }
 
 @media screen and (min-width: 768px) {
@@ -17,26 +23,67 @@
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
+    color: inherit;
+    font-weight: 400;
+    font-family: inherit;
+    line-height: 1.35;
+}
+
+.markdown-content h1,
+.markdown-content h2 {
+    margin-top: unset;
+    border-bottom: 1px solid rgba(0,0,0,.25);
+}
+
+.markdown-content h1{
+    font-size: 2em;
+    margin: 0.67em 0;
+    display: block;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.markdown-content h2{
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+
+.markdown-content p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+/* .markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
 .markdown-content h4 {
     color: #111111;
     font-weight: 400;
     margin-top: 1em;
 }
 
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3,
-.markdown-content h4,
-.markdown-content h5 {
-    font-family: Georgia, Palatino, serif;
-    font-weight: bold;
-}
+
 
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
 .markdown-content h4,
 .markdown-content h5,
+.markdown-content h6,
 .markdown-content p,
 .markdown-content dl {
     margin-bottom: 16px;
@@ -71,7 +118,7 @@
 
 .markdown-content h5 {
     font-size: 18px;
-}
+} */
 
 .markdown-content a {
     color: #0099ff;
