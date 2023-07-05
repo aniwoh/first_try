@@ -76,8 +76,8 @@
                 <div class="markdown-author">
                     作者:{{markdown.author}} 发表时间:{{markdown.created_at}}
                 </div>
-                <div class="content">
-                    {{ markdown.content|safe|slice:"1:" }}
+                <div class="markdown-content">
+                    <!-- {{ markdown.content|safe|slice:"0:" }} -->
                 </div>
             </div>
             <div class="main-footer">
@@ -94,10 +94,17 @@
             </div>
         </div>
     </div>
+    <!--传入markdown内容时应该直接传入到js中，传到HTML中会将>自动转为&gt-->
     <script>
-        var markdownContent = document.querySelector('.content');
-        var converter = new showdown.Converter({tables:true,metadata: true,Strikethrough: true});
-        var html = converter.makeHtml(markdownContent.innerHTML);
+        var markdownContent = document.querySelector('.markdown-content');
+        var data = '{{ markdown.content|escapejs }}';
+        console.log(data);
+        var converter = new showdown.Converter({
+            tables:true,
+            metadata: true,
+            strikethrough: true,
+        });
+        var html = converter.makeHtml(data);
         markdownContent.innerHTML = html;
     </script>
 </body>

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import MarkdownFilePool
+import json
 
 def index(request):
     markdown = MarkdownFilePool.objects.first()  # 获取第一个Markdown文件
