@@ -3,14 +3,10 @@ from django.http import HttpResponse
 from .models import MarkdownFilePool
 
 def index(request):
-    markdown = MarkdownFilePool.objects.first()  # 获取第一个Markdown文件
-    next_record_id = request.GET.get('next_record_id')
-    prev_record_id = request.GET.get('prev_record_id')
-    if next_record_id:
-        markdown = MarkdownFilePool.objects.filter(id=next_record_id).first()
-    elif prev_record_id:
-        markdown = MarkdownFilePool.objects.filter(id=prev_record_id).first()
-    
+    now_id=request.GET.get('id')
+    if not now_id:
+        now_id=1
+    markdown = MarkdownFilePool.objects.get(id=now_id)  # 获取第一个Markdown文件
     prev_record = MarkdownFilePool.objects.filter(id__lt=markdown.id).last()
     next_record = MarkdownFilePool.objects.filter(id__gt=markdown.id).first()
     
@@ -21,6 +17,13 @@ def index(request):
         'prev_record': prev_record,
         'next_record': next_record,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'index/index.html', context)
+
+def post(request):
+    username = request.COOKIES.get('username', 'Guest')
+    context = {
+        'username': username,
+    }
+    return render(request, 'index/post.html', context)
 
 

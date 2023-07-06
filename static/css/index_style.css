@@ -8,9 +8,8 @@
 
 body {
     height: 100vh;
-    background: linear-gradient(#9fc0cf,
-            #e5edf1);
-    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(#9fc0cf,#e5edf1);
+    font-family: "Microsoft YaHei", arial, sans-serif;
 }
 
 nav a {
