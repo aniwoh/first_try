@@ -1,4 +1,39 @@
 {% extends "./layout-index.html" %}
 {% block content %}
-这里放文章列表
+<link rel="stylesheet" href="{% static 'css/index_style.css' %}">
+<div class="main-container">
+    <div class="post">
+        <!-- <a class="post" href="{% url 'post' %}?id=1">
+            <div class="post-card">
+                <div class="post-card-img">
+                </div>
+                <div class="post-card-media-covered">
+                    <div class="mdui-card-primary index-primary">
+                        <div class="mdui-card-primary-title">
+                            使用frp进行反向代理及绑定域名
+                        </div>
+                        <div>
+                            上次更新：2022-07-04
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a> -->
+        <a href="#" class="post-card">
+            <div class="post-card-img"></div>
+            <div class="post-card-text">
+                <h2>Card 1</h2>
+                <p>Card 1 description</p>
+            </div>
+        </a>
+        <a href="#" class="post-card">
+            <div class="post-card-img"></div>
+            <div class="post-card-text">
+                <h2>Card 2</h2>
+                <p>Card 2 description</p>
+            </div>
+        </a>
+    </div>
+    </div>
+</div>
 {% endblock %}
