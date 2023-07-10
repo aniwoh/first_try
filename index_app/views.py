@@ -23,8 +23,10 @@ def post(request):
 
 def index(request):
     username = request.COOKIES.get('username', 'Guest')
+    posts = MarkdownFilePool.objects.all()
     context = {
         'username': username,
+        'posts':posts,
     }
     return render(request, 'index/index.html', context)
 

@@ -1,7 +1,7 @@
 .main-container {
     width: 50%;
     height: 100%;
-    border: red solid;
+    /* border: red solid; */
     left: 17%;
     position: absolute;
     overflow: auto;
@@ -15,12 +15,13 @@
 }
 
 .post-card{
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 40%;
+    height: 300px;
     margin-top: 10%;
-    border: red solid;
+    /* border: red solid; */
     text-decoration: none;
 }
 
@@ -35,20 +36,11 @@
 }
 
 .post-card-text {
-    padding: 10px;
-    /* 其他样式属性... */
-}
-
-
-.post-card-media-covered{
-    position: absolute;
+    position: relative;
     right: 0;
     bottom: 0;
     left: 0;
     color: #fff;
-    background: rgba(0,0,0,.4);
-}
-.mdui-card-primary {
-    position: relative;
-    padding: 24px 16px 16px 16px;
+    background: rgba(0,0,0,.8);
+    /* 其他样式属性... */
 }
