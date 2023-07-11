@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'test',
         'USER': 'root',
         'PASSWORD': 'SY2077lover',
-        'HOSR': '127.0.0.1',
+        'HOSR': '222.189.253.192',
         'POST': '3306',
     }
 }
