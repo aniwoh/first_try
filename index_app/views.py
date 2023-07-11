@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import MarkdownFilePool
 from django.urls import reverse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import requests
 
 def post(request):
     now_id=request.GET.get('id')
@@ -24,10 +27,16 @@ def post(request):
 def index(request):
     username = request.COOKIES.get('username', 'Guest')
     posts = MarkdownFilePool.objects.all()
+    # for post in posts:
+    #     response = requests.get("https://api.baka.fun/acgpic/?rand=289")
+    #     if response.status_code == 200:
+    #         print(response.text)
+    #         post['background_image'] = response.json()['url']
+    #     else:
+    #         continue
     context = {
         'username': username,
         'posts':posts,
     }
     return render(request, 'index/index.html', context)
-
 

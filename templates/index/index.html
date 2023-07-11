@@ -5,12 +5,24 @@
     <div class="post">
         {% for post in posts %}
         <a href="{% url 'post' %}?id={{ post.id }}" class="post-card">
-            <div class="post-card-img"></div>
+            <div class="post-card-img" id="post-{{post.id}}"></div>
             <div class="post-card-text">
                 <h2>{{ post.title }}</h2>
                 <p>{{ post.author }}     {{ post.created_at }}</p>
             </div>
         </a>
+        <script>
+            fetch('https://api.baka.fun/acgpic', { method: 'GET', redirect: 'follow' })
+            .then(function(response) {
+                var redirectedUrl = response.url;
+                var postID='{{ post.id|escapejs }}'
+                var cardElement = document.getElementById("post-" + postID);
+                cardElement.style.backgroundImage = "url('" + redirectedUrl + "')";
+            })
+            .catch(function(error) {
+                console.log('Error:', error);
+    });
+            </script>
         {% endfor %}
     </div>
 </div>
