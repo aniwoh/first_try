@@ -86,8 +86,9 @@ DATABASES = {
         'NAME': 'django',
         'USER': 'django',
         'PASSWORD': 'Gkt8Q23p2BHwkzDf',
-        'HOSR': '116.204.133.234',
+        'HOST': '116.204.133.234',
         'POST': '3306',
+        'CONN_MAX_AGE': 9*60,
     }
 }
 
