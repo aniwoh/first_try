@@ -83,10 +83,10 @@ WSGI_APPLICATION = 'first_try.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
-        'USER': 'root',
-        'PASSWORD': 'SY2077lover',
-        'HOSR': '222.189.253.192',
+        'NAME': 'django',
+        'USER': 'django',
+        'PASSWORD': 'Gkt8Q23p2BHwkzDf',
+        'HOSR': '116.204.133.234',
         'POST': '3306',
     }
 }
