@@ -82,13 +82,14 @@ WSGI_APPLICATION = 'first_try.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER': 'django',
-        'PASSWORD': 'Gkt8Q23p2BHwkzDf',
-        'HOST': '116.204.133.234',
-        'POST': '3306',
-        'CONN_MAX_AGE': 9*60,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'NAME': 'django',
+        # 'USER': 'django',
+        # 'PASSWORD': 'Gkt8Q23p2BHwkzDf',
+        # 'HOST': '116.204.133.234',
+        # 'POST': '3306',
+        # 'CONN_MAX_AGE': 9*60,
     }
 }
 
