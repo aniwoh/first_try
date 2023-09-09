@@ -3,8 +3,8 @@
     font-family: "Microsoft YaHei", arial, sans-serif;
     line-height: 1.8;
     /*显示一个边框，调试时使用*/
-    border-style: solid;
-    border-color: #ffcdcd;
+    /* border-style: solid;
+    border-color: #ffcdcd; */
     border-width: 1px;
     word-wrap: break-word;
 
