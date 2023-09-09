@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-inp4@=_0&k4=n2_0kl0m^krwkuahwh7l=h1byl%!4*=ync96=k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django.aniwoh.top',]
 
 
 # Application definition
@@ -142,4 +142,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 
 # you need to add the code below when you put your web on server
-CSRF_TRUSTED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top',]
+CSRF_TRUSTED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top']
