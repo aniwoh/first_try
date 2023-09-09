@@ -142,4 +142,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 
 # you need to add the code below when you put your web on server
-CSRF_TRUSTED_ORIGINS = [ 'http://django.aniwoh.top', ]
+CSRF_TRUSTED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top',]
