@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-inp4@=_0&k4=n2_0kl0m^krwkuahwh7l=h1byl%!4*=ync96=k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# 在本地测试时请保证DEBUG = True，否则会导致无法获取到static文件
 DEBUG = True
 
-ALLOWED_HOSTS = ['django.aniwoh.top',]
+ALLOWED_HOSTS = ['django.aniwoh.top', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -142,4 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 
 # you need to add the code below when you put your web on server
-CSRF_TRUSTED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top']
+CSRF_TRUSTED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top', 'http://127.0.0.1:8000', 'http://localhost:8000']

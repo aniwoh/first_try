@@ -15,7 +15,7 @@ def login_view(request):
             return response  # 登录成功后重定向到主页
         else:
             error_message = "账号或密码错误"
-            return render(request, 'login.html', {'error_message': error_message})
+            return render(request, 'login_app/login.html', {'error_message': error_message})
     
     return render(request, 'login_app/login.html')
 
