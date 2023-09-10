@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  django:
+    image: firstry
+    container_name: django
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=False  # 可选，根据需要设置环境变量
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-config:/etc/nginx/conf.d  # 将 Nginx 配置文件挂载到容器中
+      - /etc/nginx/cert:/etc/nginx/ssl
+      - ./static:/usr/share/nginx/html/static  # 挂载静态文件目录

@@ -1,0 +1,24 @@
+server {
+    listen 80;
+    server_name django.aniwoh.top;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name django.aniwoh.top;
+
+    ssl_certificate  cert/django.aniwoh.top_bundle.pem;
+    ssl_certificate_key cert/django.aniwoh.top.key;
+
+    location / {
+        proxy_pass http://django:8000;  # 这里使用容器的服务名称作为代理目标
+        proxy_set_header Referer $http_referer;
+		proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location /static/ {
+        alias /app/static/;  # 这里假定容器内部的静态文件路径是 /app/static/
+    }
+}
