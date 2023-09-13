@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>登陆</title>
+    <title>{% block title %}Default Title{% endblock %}</title>
     <!-- 页面图标 -->
     <link rel="shortcut icon" href="{% static 'img/avater_240.jpg' %}">
     <style>
@@ -28,7 +28,7 @@
         .login-wrapper {
             background-color: #fff;
             width: 358px;
-            height: 588px;
+            height: auto;
             border-radius: 15px;
             padding: 0 50px;
             position: relative;
@@ -41,7 +41,7 @@
             font-size: 38px;
             font-weight: bold;
             text-align: center;
-            line-height: 200px;
+            padding: 10%;
         }
 
         .input-item {
