@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from index_app.models import MarkdownFilePool
+from django.contrib.auth.models import User
 
 @login_required
 def home(request):
@@ -33,10 +34,12 @@ def data(request):
 
 @login_required
 def userall(request):
+    users=User.objects.all()
     username = request.COOKIES.get('username')
     content={
         'username':username,
         'current_page':'userall',
+        'users':users
     }
     return render(request,'homepage/userall.html',content)
 
