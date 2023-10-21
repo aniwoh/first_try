@@ -12,16 +12,29 @@
             </div>
         </a>
         <script>
-            fetch('https://api.baka.fun/acgpic', { method: 'GET', redirect: 'follow' })
+            fetch('/api/proxy', { method: 'GET' })
             .then(function(response) {
-                var redirectedUrl = response.url;
+            if (response.ok) {
+                // 获取代理的图片数据
+                return response.blob();
+            } else {
+                console.log('Error:', response.statusText);
+            }
+        })
+        .then(function(imageBlob) {
+            if (imageBlob) {
+                // 创建URL对象，用于显示图片
+                const imageUrl = URL.createObjectURL(imageBlob);
+
+                // 修改原始代码，将图片设置为背景
                 var postID='{{ post.id|escapejs }}'
                 var cardElement = document.getElementById("post-" + postID);
-                cardElement.style.backgroundImage = "url('" + redirectedUrl + "')";
-            })
+                cardElement.style.backgroundImage = "url('" + imageUrl + "')";
+            }
+        })
             .catch(function(error) {
                 console.log('Error:', error);
-    });
+        });
             </script>
         {% endfor %}
     </div>

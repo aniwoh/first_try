@@ -5,4 +5,5 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('',views.index,name='index'),
     path('post',views.post,name='post'),
+    path('api/proxy/', views.proxy_api, name='proxy_api'),
 ]
