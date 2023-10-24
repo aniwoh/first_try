@@ -27,13 +27,6 @@ def post(request):
 def index(request):
     username = request.COOKIES.get('username', 'Guest')
     posts = MarkdownFilePool.objects.all()
-    # for post in posts:
-    #     response = requests.get("https://api.baka.fun/acgpic/?rand=289")
-    #     if response.status_code == 200:
-    #         print(response.text)
-    #         post['background_image'] = response.json()['url']
-    #     else:
-    #         continue
     context = {
         'username': username,
         'posts':posts,
@@ -43,22 +36,12 @@ def index(request):
 def proxy_api(request):
     # 构建API请求的URL
     api_url = "https://www.dmoe.cc/random.php"
-    
-    # 向API服务器发起请求
     response = requests.get(api_url)
-    
     # 检查请求是否成功
     if response.status_code == 200:
-        # 获取API响应的二进制内容
         image_data = response.content
-        
-        # 创建HTTP响应对象，将图像数据作为响应内容
         response = HttpResponse(image_data, content_type="image/jpeg")
-
-          # 设置文件名以触发浏览器下载
-        response['Content-Disposition'] = 'attachment; filename="random_image.jpg"'  # 可以更改文件名
-        
+        response['Content-Disposition'] = 'attachment; filename="random_image.jpg"'
         return response
     else:
-        # 如果请求失败，返回适当的错误
         return JsonResponse({'error': 'API request failed'}, status=500)
