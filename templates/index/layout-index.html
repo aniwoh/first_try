@@ -34,7 +34,13 @@
                 </a>
                 <p>
                     Good day,
-                    <span>{{ username }}!</span>
+                    <span>
+                        {% if user.is_authenticated %}
+                            {{ user.username }}
+                        {% else %}
+                            Guest
+                        {% endif %}
+                    </span>
                 </p>
             </div>
             <hr class="line">
