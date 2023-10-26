@@ -26,7 +26,6 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # 自动登录用户
             return redirect('login')  # 注册成功后重定向到首页或其他页面
     else:
         form = UserRegistrationForm()
