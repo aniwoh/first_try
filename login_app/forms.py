@@ -43,7 +43,7 @@ class UserRegistrationForm(UserCreationForm):
         password2 = self.cleaned_data.get("password2")
 
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("密码部匹配")
+            raise forms.ValidationError("密码不匹配")
 
 
     class Meta:

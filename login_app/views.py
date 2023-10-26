@@ -1,8 +1,11 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
+
+allow_register = False
 
 def login_view(request):
     if request.method == 'POST':
@@ -22,13 +25,18 @@ def login_view(request):
     return render(request, 'login_app/login.html')
 
 def register(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            return redirect('login')  # 注册成功后重定向到首页或其他页面
+    if allow_register:
+        if request.method == 'POST':
+            form = UserRegistrationForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                return redirect('login')  # 注册成功后重定向到首页或其他页面
+        else:
+            form = UserRegistrationForm()
     else:
-        form = UserRegistrationForm()
+        text = "管理员已关闭注册功能"
+        response = HttpResponse(text, content_type="text/plain; charset=utf-8")
+        return response
     
     # error_message = form.errors.as_data()
     return render(request, 'login_app/register.html', {'form': form})
