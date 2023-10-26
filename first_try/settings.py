@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'index_app',
     'login_app',
     'homepage',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -120,7 +119,7 @@ LOGIN_URL='/user/login'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -142,8 +141,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CORS_ORIGIN_ALLOW_ALL = True
-
 
 # you need to add the code below when you put your web on server
-CSRF_TRUSTED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top', 'http://127.0.0.1:8000', 'http://localhost:8000']
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOWED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top', 'http://127.0.0.1:8000', 'http://localhost:8000']

@@ -25,8 +25,8 @@ class UserRegistrationForm(UserCreationForm):
         validators=[
             validators.MinLengthValidator(limit_value=8, message="密码长度至少为8个字符。"),
             validators.RegexValidator(
-                regex=r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$',
-                message="密码必须包含大小写字母和数字。",
+                regex=r'^(?=.*[A-Za-z])(?=.*\d).+',
+                message="密码必须包含字母和数字。",
                 code="invalid_password"
             )
         ]
