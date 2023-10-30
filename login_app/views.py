@@ -4,8 +4,7 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
-
-allow_register = False
+from my_settings import *
 
 def login_view(request):
     if request.method == 'POST':
@@ -25,7 +24,7 @@ def login_view(request):
     return render(request, 'login_app/login.html')
 
 def register(request):
-    if allow_register:
+    if ALLOW_REGISTER:
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
             if form.is_valid():
