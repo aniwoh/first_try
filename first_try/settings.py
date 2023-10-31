@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-inp4@=_0&k4=n2_0kl0m^krwkuahwh7l=h1byl%!4*=ync96=k
 # 在本地测试时请保证DEBUG = True，否则会导致无法获取到static文件
 DEBUG = True
 
-ALLOWED_HOSTS = ['django.aniwoh.top', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
+
+# 当用户使用代理后会可能导致获取封面图时会报错，所以让django不验证代理
+os.environ['NO_PROXY'] = '*'
 
 
 # Application definition
