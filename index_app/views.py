@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from .models import MarkdownFilePool
 from django.urls import reverse
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import requests
 
 def post(request):
@@ -15,9 +14,7 @@ def post(request):
     prev_record = MarkdownFilePool.objects.filter(id__lt=markdown.id).last()
     next_record = MarkdownFilePool.objects.filter(id__gt=markdown.id).first()
     
-    username = request.COOKIES.get('username', 'Guest')
     context = {
-        'username': username,
         'markdown': markdown,
         'prev_record': prev_record,
         'next_record': next_record,
@@ -25,10 +22,8 @@ def post(request):
     return render(request, 'index/post.html', context)
 
 def index(request):
-    username = request.COOKIES.get('username', 'Guest')
     posts = MarkdownFilePool.objects.all()
     context = {
-        'username': username,
         'posts':posts,
     }
     return render(request, 'index/index.html', context)
