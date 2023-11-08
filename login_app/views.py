@@ -4,24 +4,31 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
+from .forms import UserLoginForm
 from my_settings import *
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
 
-        user = authenticate(request, username=username, password=password)
-        # 验证用户名密码是否正确，验证成功返回用户对象
-        if user is not None:
-            login(request, user)
-            response = redirect('/index')
-            return response  # 登录成功后重定向到主页
+            user = authenticate(request, username=username, password=password)
+            # 验证用户名密码是否正确，验证成功返回用户对象
+            if user is not None:
+                login(request, user)
+                response = redirect('/index')
+                return response  # 登录成功后重定向到主页
+            else:
+                error_message = "账号或密码错误"
         else:
-            error_message = "账号或密码错误"
-            return render(request, 'login_app/login.html', {'error_message': error_message})
+            error_message = "Invalid form data. Please check your input."
+    else:
+        form = UserLoginForm()
+        error_message = None
     
-    return render(request, 'login_app/login.html')
+    return render(request, 'login_app/login.html',{'form':form,'error_message': error_message})
 
 def register(request):
     if ALLOW_REGISTER:

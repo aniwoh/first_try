@@ -49,3 +49,22 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'password1','password2')
+
+
+class UserLoginForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    # 自定义用户名字段
+    username = forms.CharField(
+        label="用户名",  # 前端通过{{form.username.label_tag}}调用
+        max_length=10,
+        widget=forms.TextInput(attrs={'placeholder': '用户名'}),
+        )
+    
+    # 自定义密码字段
+    password = forms.CharField(
+        label="密码",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'placeholder': '输入密码'}),
+    )
