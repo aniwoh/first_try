@@ -29,8 +29,8 @@ def index(request):
     return render(request, 'index/index.html', context)
 
 def proxy_api(request):
-    # 构建API请求的URL
-    api_url = "https://www.dmoe.cc/random.php"
+    # 构建API请求的URL，要求该api返回的结果是一个图片
+    api_url = "https://t.mwm.moe/pc"
     response = requests.get(api_url)
     # 检查请求是否成功
     if response.status_code == 200:
