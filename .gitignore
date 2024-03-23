@@ -107,3 +107,4 @@ GitHub.sublime-settings
 *initial.py
 .vscode
 .idea
+*/migrations/*

@@ -6,3 +6,5 @@ class MarkdownFilePool(models.Model):
     content = models.TextField()
     author = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    comment_count = models.IntegerField(default=0)
+    view_count = models.IntegerField(default=0)
