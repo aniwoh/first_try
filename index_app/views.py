@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import MarkdownFilePool
+from index_app.models import Comments
 from django.urls import reverse
 from django.http import JsonResponse
 import requests
@@ -13,6 +15,8 @@ def post(request):
     markdown = MarkdownFilePool.objects.get(id=now_id)  # 获取第一个Markdown文件
     prev_record = MarkdownFilePool.objects.filter(id__lt=markdown.id).last()
     next_record = MarkdownFilePool.objects.filter(id__gt=markdown.id).first()
+    markdown.view_count+=1
+    markdown.save()
     
     context = {
         'markdown': markdown,
@@ -40,3 +44,13 @@ def proxy_api(request):
         return response
     else:
         return JsonResponse({'error': 'API request failed'}, status=500)
+
+@login_required
+def post_comment(request):
+    if request.method == 'POST':
+        content=request.POST['text']
+        article_id=request.POST['now-article']
+        author_id=request.POST['now-author']
+        comment=Comments(content=content,article_id=article_id,author_id=author_id)
+        comment.save()
+        return redirect(f'/index/post?id={article_id}')

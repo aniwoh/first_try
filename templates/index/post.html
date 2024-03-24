@@ -2,15 +2,50 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/post_style.css' %}">
 <link rel="stylesheet" href="{% static 'css/markdown-content.css' %}">
+<link rel="stylesheet" href="{% static 'css/comment_style.css' %}">
 <div class="markdown-main">
     <div class="markdown-title">
         {{markdown.title}}
     </div>
     <div class="markdown-author">
-        作者:{{markdown.author}} 发表时间:{{markdown.created_at}}
+        {{markdown.view_count}}浏览     |    {{markdown.created_at}}    |    {{markdown.author}}
     </div>
     <div class="markdown-content">
         <!-- 这里是markdown内容的输出位置，通过js输出 -->
+    </div>
+    <div class="comment_post" >
+        <h1>发表评论</h1>
+        <div class="comment_post_border">
+            <form id="comment_form" method="post" action="{% url 'post_comment' %}">
+                {% csrf_token %}
+                <textarea id="comment-textarea" class="comment-textarea" name="text" rows="8" cols="50" tabindex="4" required=""></textarea>
+                {% if user.is_authenticated %}
+                    <input name="now-author" value= "{{ user.id }}" style="display: none;">
+                    <input name="now-article" value= "{{ markdown.id }}" style="display: none;">
+                {% endif %}
+                <button id="submit" class="comment-submit">发表评论</button>
+            </form>
+        </div>
+    </div>
+    <div class="comment_content" >
+        <h1>全部评论</h1>
+        <div class="comment_content_border">
+            <div class="comment_content_display">
+                <div class="every_comment">
+                    <div class="comment_image">
+                        <img src="{% static 'img/avater_240.jpg' %}" alt="" height="40px" width="40px">
+                    </div>
+                    <div class="comment_main">
+                        <div class="comment_main_header">@aniwoh</div>
+                        <div class="comment_main_content" style="width: auto;">还没有任何评论</div>
+                    </div>
+                    <div class="comment_toolBar">
+                        <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
+                        <span>0</span>      
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="main-footer">

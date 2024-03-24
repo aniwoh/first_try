@@ -8,7 +8,10 @@
             <div class="post-card-img" id="post-{{post.id}}"></div>
             <div class="post-card-text">
                 <h2>{{ post.title }}</h2>
-                <p>{{ post.author }}     {{ post.created_at }}</p>
+                <p>
+                    <span style="float: left;">{{ post.author }} {{ post.created_at }} </span>
+                    <span style="float: right;;"><i class="fa-solid fa-eye"></i>   {{post.view_count}} <i class="fa-solid fa-comment"></i>   {{post.comment_count}} </span> 
+                </p>    
             </div>
         </a>
         <script>

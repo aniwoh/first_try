@@ -52,6 +52,7 @@ def setting(request):
     }
     return render(request,'homepage/setting.html',content)
 
+@login_required
 def upload_view(request):
     if request.method == 'POST':
         title = request.POST['title']
