@@ -20,7 +20,7 @@
                 {% csrf_token %}
                 <textarea id="comment-textarea" class="comment-textarea" name="text" rows="8" cols="50" tabindex="4" required=""></textarea>
                 {% if user.is_authenticated %}
-                    <input name="now-author" value= "{{ user.id }}" style="display: none;">
+                    <input name="now-author" value= "{{ user.username }}" style="display: none;">
                     <input name="now-article" value= "{{ markdown.id }}" style="display: none;">
                 {% endif %}
                 <button id="submit" class="comment-submit">发表评论</button>
@@ -31,19 +31,21 @@
         <h1>全部评论</h1>
         <div class="comment_content_border">
             <div class="comment_content_display">
+                {% for comment in comments %}
                 <div class="every_comment">
                     <div class="comment_image">
                         <img src="{% static 'img/avater_240.jpg' %}" alt="" height="40px" width="40px">
                     </div>
                     <div class="comment_main">
-                        <div class="comment_main_header">@aniwoh</div>
-                        <div class="comment_main_content" style="width: auto;">还没有任何评论</div>
+                        <div class="comment_main_header">@{{ comment.author}}</div>
+                        <div class="comment_main_content" style="width: auto;">{{comment.content}}</div>
                     </div>
                     <div class="comment_toolBar">
                         <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
                         <span>0</span>      
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -39,7 +39,8 @@
 
 .comment_content_border{
     border-radius: 3px;
-    border: 1px solid red; 
+    /* border: 1px solid red;  */
+    border: 1px solid #797979;
     height: auto; 
     width: 100%; 
     margin: 0 auto;
@@ -47,7 +48,7 @@
     padding: 10px;
 }
 .comment_content_display{
-    border: 1px solid red;
+    /* border: 1px solid red; */
     margin: 0 auto;
     height: 100%;
     width: 100%;
@@ -62,11 +63,15 @@
     display: flex;
 }
 
+.comment_main{
+    width: 90%;
+}
 .comment_toolBar{
-    position: absolute;
+    /* position: absolute;
     right: 20px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); */
+    align-content: center;
 }
 
 .comment_thumbs_up:hover{

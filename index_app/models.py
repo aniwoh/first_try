@@ -13,4 +13,4 @@ class Comments(models.Model):
     content = models.TextField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     article_id = models.IntegerField()
-    author_id = models.IntegerField()
+    author = models.TextField(max_length=20)

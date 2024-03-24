@@ -15,13 +15,16 @@ def post(request):
     markdown = MarkdownFilePool.objects.get(id=now_id)  # 获取第一个Markdown文件
     prev_record = MarkdownFilePool.objects.filter(id__lt=markdown.id).last()
     next_record = MarkdownFilePool.objects.filter(id__gt=markdown.id).first()
+
     markdown.view_count+=1
     markdown.save()
     
+    comments=Comments.objects.filter(article_id=now_id)
     context = {
         'markdown': markdown,
         'prev_record': prev_record,
         'next_record': next_record,
+        'comments':comments
     }
     return render(request, 'index/post.html', context)
 
@@ -50,7 +53,7 @@ def post_comment(request):
     if request.method == 'POST':
         content=request.POST['text']
         article_id=request.POST['now-article']
-        author_id=request.POST['now-author']
-        comment=Comments(content=content,article_id=article_id,author_id=author_id)
+        author=request.POST['now-author']
+        comment=Comments(content=content,article_id=article_id,author=author)
         comment.save()
         return redirect(f'/index/post?id={article_id}')
