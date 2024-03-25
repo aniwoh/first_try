@@ -37,6 +37,10 @@
     background-color: rgba(230, 235, 240, 1);
 }
 
+button:disabled {
+    cursor: not-allowed;
+}
+
 .comment_content_border{
     border-radius: 3px;
     /* border: 1px solid red;  */

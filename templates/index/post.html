@@ -23,7 +23,12 @@
                     <input name="now-author" value= "{{ user.username }}" style="display: none;">
                     <input name="now-article" value= "{{ markdown.id }}" style="display: none;">
                 {% endif %}
-                <button id="submit" class="comment-submit">发表评论</button>
+                {% if user.is_authenticated %}
+                    <button id="submit" class="comment-submit">发表评论</button>
+                {% else %}
+                    <button id="submit" class="comment-submit" disabled>评论前请先登录</button>
+                {% endif %}
+                
             </form>
         </div>
     </div>
