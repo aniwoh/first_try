@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from index_app.models import MarkdownFilePool
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 @login_required
 def home(request):
