@@ -74,13 +74,38 @@ def upload_view(request):
 
 @login_required
 def get_user_json_api(request):
-    users=User.objects.all().values('username','is_superuser','date_joined','id')
-    level = users.userprofile.level
-    print(level)
+    users=User.objects.all().values('username','is_superuser','date_joined','id','level')
     users_list=[]
     for i in users:
         i['date_joined']=i['date_joined'].strftime('%Y-%m-%d %H:%M:%S')
+        i['level']=replace_level(i['level'])
         users_list.append(i)
     user_dict={'code':0,'msg':'','count':len(users),'data':users_list}
     # user_json_data = json.dumps(user_dict)
     return JsonResponse(user_dict)
+
+def replace_level(level):
+    # 致敬《魔禁》
+    if level==0:
+        return '无能力者'
+    elif level==1:
+        return '低能力者'
+    elif level==2:
+        return '异能力者'
+    elif level==3:
+        return '强能力者'
+    elif level==4:
+        return '大能力者'
+    elif level==5:
+        return '超能力者'
+    elif level==6:
+        return '绝对能力者'
+    else:
+        return '魔法士'
+    
+@login_required
+def delete_user(request):
+    print(request.POST['id'])
+    user_id = request.POST['id']
+    User.objects.filter(id=user_id).delete()
+    return redirect('/homepage/userall')

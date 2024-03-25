@@ -126,8 +126,6 @@ TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
-USE_TZ = True
-
 DEFAULT_CURRENCY = 'utf-8'
 
 
