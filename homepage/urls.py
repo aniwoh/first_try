@@ -10,4 +10,5 @@ urlpatterns = [
     path('setting',views.setting,name='setting'),
     path('', RedirectView.as_view(url='home')),
     path('upload/', views.upload_view, name='upload'),
+    path('get_user_json/', views.get_user_json_api, name='get_user_json'),
 ]

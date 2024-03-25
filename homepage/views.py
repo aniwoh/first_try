@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from index_app.models import MarkdownFilePool
+from index_app.models import MarkdownFilePool,UserProfile
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+import json
 
 @login_required
 def home(request):
@@ -34,7 +36,7 @@ def data(request):
 
 @login_required
 def userall(request):
-    users=User.objects.all()
+    users=User.objects.all().values('username','is_superuser','date_joined')
     username = request.COOKIES.get('username')
     content={
         'username':username,
@@ -68,3 +70,15 @@ def upload_view(request):
     
     return redirect('/homepage/list')
 
+@login_required
+def get_user_json_api(request):
+    users=User.objects.all().values('username','is_superuser','date_joined','id')
+    level = users.userprofile.level
+    print(level)
+    users_list=[]
+    for i in users:
+        i['date_joined']=i['date_joined'].strftime('%Y-%m-%d %H:%M:%S')
+        users_list.append(i)
+    user_dict={'code':0,'msg':'','count':len(users),'data':users_list}
+    # user_json_data = json.dumps(user_dict)
+    return JsonResponse(user_dict)
