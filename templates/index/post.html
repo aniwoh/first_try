@@ -47,7 +47,7 @@
                         <div class="comment_main_footer">
                             <div class="comment_main_footer_time"> {{ root_comment.created_at|date:"Y-m-d"}}</div>
                             <div class="comment_main_footer_tool">
-                                <button class="comment_reply" onclick="" lay-on="comment_repeat"><i class="fa-solid fa-reply fa-2xl"></i></button>
+                                <button class="comment_reply" onclick="" lay-on="comment_repeat" data-id="{{root_comment.id}}" data-author="{{root_comment.author}}"><i class="fa-solid fa-reply fa-2xl"></i></button>
                                 <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
                                 <span>0</span>
                             </div>
@@ -113,14 +113,39 @@
 <script src="//unpkg.com/layui@2.9.7/dist/layui.js"></script> 
 <script>
 layui.use(function(){
-  var layer = layui.layer;
-  var util = layui.util;
-  // 事件
-  util.on('lay-on', {
-    'comment_repeat': function(){
-      layer.prompt({title: '你正在回复{{root_comment.author}}的评论id:{{root_comment.id}}', formType: 2}, function(value, index, elem){
-        if(value === '') return elem.focus();
-        layer.msg('获得：'+ util.escape(value)); // 显示 value
+    var layer = layui.layer;
+    var util = layui.util;
+    // 事件
+    util.on('lay-on', {
+        'comment_repeat': function(){
+        var commentId = this.dataset.id;
+        var author = this.dataset.author;
+        layer.prompt({title: '你正在回复'+author+'的评论,id为'+commentId, formType: 2}, function(value, index, elem){
+            if(value === '') return elem.focus();
+            // Send post request to the backend
+            var commentId = this.dataset.id;
+            var author = this.dataset.author;
+            var commentText = value;
+            var now_article = '{{ markdown.id }}';
+            var formData = new FormData();
+            formData.append('id', commentId);
+            formData.append('author', author);
+            formData.append('text', commentText);
+            formData.append('now-article', now_article);
+            fetch('index/post_comment', {
+                method: 'POST',
+                body: formData
+            })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the backend
+            console.log(data);
+            // Display a success message or perform any other actions
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+        });
         // 关闭 prompt
         layer.close(index);
       });
