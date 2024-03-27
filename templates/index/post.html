@@ -36,20 +36,50 @@
         <h1>全部评论</h1>
         <div class="comment_content_border">
             <div class="comment_content_display">
-                {% for comment in comments %}
+                {% for root_comment in root_comments %}
                 <div class="every_comment">
                     <div class="comment_image">
                         <img src="{% static 'img/avater_240.jpg' %}" alt="" height="40px" width="40px">
                     </div>
                     <div class="comment_main">
-                        <div class="comment_main_header">@{{ comment.author}}</div>
-                        <div class="comment_main_content" style="width: auto;">{{comment.content}}</div>
-                    </div>
-                    <div class="comment_toolBar">
-                        <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
-                        <span>0</span>      
+                        <div class="comment_main_header">{{ root_comment.author}}</div>
+                        <div class="comment_main_content" style="width: auto;">{{root_comment.content}}</div>
+                        <div class="comment_main_footer">
+                            <div class="comment_main_footer_time"> {{ root_comment.created_at|date:"Y-m-d"}}</div>
+                            <div class="comment_main_footer_tool">
+                                <button class="comment_reply" onclick="" lay-on="comment_repeat"><i class="fa-solid fa-reply fa-2xl"></i></button>
+                                <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
+                                <span>0</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {% for child_comment in child_comments %}
+                {% if child_comment.belong_to_comment == root_comment.id %}
+                <div class="every_comment child_comment">
+                    <div class="comment_image">
+                        <img src="{% static 'img/avater_240.jpg' %}" alt="" height="40px" width="40px">
+                    </div>
+                    <div class="comment_main">
+                        <div class="comment_main_header">
+                            {{ child_comment.author}}
+                            {% if child_comment.repeat_someone %}
+                            回复 {{child_comment.repeat_someone}}:{% endif %}
+                        </div>
+                        <div class="comment_main_content" style="width: auto;">{{child_comment.content}}</div>
+                        <div class="comment_main_footer">
+                            <div class="comment_main_footer_time"> {{ child_comment.created_at|date:"Y-m-d" }}</div>
+                            <div class="comment_main_footer_tool">
+                                <button class="comment_reply"><i class="fa-solid fa-reply fa-2xl"></i></button>
+                                <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="transparent-row" style="height: 10px;"></div>
                 {% endfor %}
             </div>
         </div>
@@ -79,5 +109,23 @@
     });
     var html = converter.makeHtml(data);
     markdownContent.innerHTML = html;
+</script>
+<script src="//unpkg.com/layui@2.9.7/dist/layui.js"></script> 
+<script>
+layui.use(function(){
+  var layer = layui.layer;
+  var util = layui.util;
+  // 事件
+  util.on('lay-on', {
+    'comment_repeat': function(){
+      layer.prompt({title: '你正在回复{{root_comment.author}}的评论id:{{root_comment.id}}', formType: 2}, function(value, index, elem){
+        if(value === '') return elem.focus();
+        layer.msg('获得：'+ util.escape(value)); // 显示 value
+        // 关闭 prompt
+        layer.close(index);
+      });
+    },
+  })
+});
 </script>
 {% endblock %}

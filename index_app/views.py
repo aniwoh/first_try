@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.core import serializers
 import requests
+import datetime
 
 def post(request):
     now_id=request.GET.get('id')
@@ -20,12 +21,14 @@ def post(request):
     markdown.view_count+=1
     markdown.save()
     
-    comments=Comments.objects.filter(article_id=now_id)
+    root_comments=Comments.objects.filter(article_id=now_id,belong_to_comment=0)
+    child_comments=Comments.objects.filter(article_id=now_id,belong_to_comment__gt=0)
     context = {
         'markdown': markdown,
         'prev_record': prev_record,
         'next_record': next_record,
-        'comments':comments
+        'root_comments':root_comments,
+        'child_comments':child_comments,
     }
     return render(request, 'index/post.html', context)
 
@@ -58,3 +61,6 @@ def post_comment(request):
         comment=Comments(content=content,article_id=article_id,author=author)
         comment.save()
         return redirect(f'/index/post?id={article_id}')
+
+def format_date(date):
+    return date.strftime("%Y-%m-%d")

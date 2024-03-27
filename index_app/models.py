@@ -14,3 +14,5 @@ class Comments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     article_id = models.IntegerField()
     author = models.TextField(max_length=20)
+    belong_to_comment = models.IntegerField(default=0) # 0 means this comment is a root comment, otherwise it is a reply to a comment
+    repeat_someone = models.TextField(max_length=20, default='') # if this comment is a reply to a comment, this field will store the author of the comment

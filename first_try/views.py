@@ -33,4 +33,5 @@ def server_error503(request, exception):
 def server_error504(request, exception):
     return render(request, 'errors/504.html', {'exception': exception}, status=504)
 
-
+def layer_view(request, page_name):
+    return render(request, 'layer/'+page_name+'.html')
