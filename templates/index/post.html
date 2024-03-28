@@ -115,9 +115,15 @@
 layui.use(function(){
     var layer = layui.layer;
     var util = layui.util;
+    var user = '{{ user.is_authenticated }}';
     // 事件
     util.on('lay-on', {
         'comment_repeat': function(){
+            if (user === 'False') {
+                // 如果用户未登录，显示提示并返回
+                layer.msg('请先登录');
+                return;
+            }
         var belongToComment = this.dataset.belongToComment;
         var repeatSomeone = this.dataset.repeatSomeone;
         var now_article = '{{ markdown.id }}';
@@ -138,19 +144,18 @@ layui.use(function(){
                     'X-CSRFToken': csrftoken
                 }
             })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the response from the backend
-            console.log(data);
-            // Display a success message or perform any other actions
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the request
-            console.error(error);
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error(error);
+            });
+            layer.msg('评论成功,网页将自动刷新');
+            layer.close(index);
+            window.location.reload();
         });
-        // 关闭 prompt
-        layer.close(index);
-      });
     },
   })
 });
