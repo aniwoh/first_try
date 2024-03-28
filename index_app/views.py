@@ -57,8 +57,11 @@ def post_comment(request):
     if request.method == 'POST':
         content=request.POST['text']
         article_id=request.POST['now-article']
-        author=request.POST['now-author']
-        comment=Comments(content=content,article_id=article_id,author=author)
+        author=request.user.username
+        belong_to_comment=request.POST['belong_to_comment']
+        repeatSomeone=request.POST['repeatSomeone']
+        comment=Comments(content=content,article_id=article_id,author=author,belong_to_comment=belong_to_comment,repeat_someone=repeatSomeone)
+        print(comment)
         comment.save()
         return redirect(f'/index/post?id={article_id}')
 

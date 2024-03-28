@@ -47,7 +47,7 @@
                         <div class="comment_main_footer">
                             <div class="comment_main_footer_time"> {{ root_comment.created_at|date:"Y-m-d"}}</div>
                             <div class="comment_main_footer_tool">
-                                <button class="comment_reply" onclick="" lay-on="comment_repeat" data-id="{{root_comment.id}}" data-author="{{root_comment.author}}"><i class="fa-solid fa-reply fa-2xl"></i></button>
+                                <button class="comment_reply" onclick="" lay-on="comment_repeat" data-belong-to-comment="{{root_comment.id}}" data-repeat-someone="{{root_comment.author}}"><i class="fa-solid fa-reply fa-2xl"></i></button>
                                 <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
                                 <span>0</span>
                             </div>
@@ -70,7 +70,7 @@
                         <div class="comment_main_footer">
                             <div class="comment_main_footer_time"> {{ child_comment.created_at|date:"Y-m-d" }}</div>
                             <div class="comment_main_footer_tool">
-                                <button class="comment_reply"><i class="fa-solid fa-reply fa-2xl"></i></button>
+                                <button class="comment_reply" onclick="" lay-on="comment_repeat" data-belong-to-comment="{{root_comment.id}}" data-repeat-someone="{{child_comment.author}}"><i class="fa-solid fa-reply fa-2xl"></i></button>
                                 <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
                                 <span>0</span>
                             </div>
@@ -118,23 +118,25 @@ layui.use(function(){
     // 事件
     util.on('lay-on', {
         'comment_repeat': function(){
-        var commentId = this.dataset.id;
-        var author = this.dataset.author;
-        layer.prompt({title: '你正在回复'+author+'的评论,id为'+commentId, formType: 2}, function(value, index, elem){
+        var belongToComment = this.dataset.belongToComment;
+        var repeatSomeone = this.dataset.repeatSomeone;
+        var now_article = '{{ markdown.id }}';
+        layer.prompt({title: '你正在回复'+repeatSomeone+'的评论,id为'+belongToComment, formType: 2}, function(value, index, elem){
             if(value === '') return elem.focus();
             // Send post request to the backend
-            var commentId = this.dataset.id;
-            var author = this.dataset.author;
             var commentText = value;
-            var now_article = '{{ markdown.id }}';
             var formData = new FormData();
-            formData.append('id', commentId);
-            formData.append('author', author);
             formData.append('text', commentText);
             formData.append('now-article', now_article);
-            fetch('index/post_comment', {
+            formData.append('belong_to_comment', belongToComment);
+            formData.append('repeatSomeone', repeatSomeone);
+            var csrftoken = document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
+            fetch('/post_comment', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
             })
         .then(response => response.json())
         .then(data => {
