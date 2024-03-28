@@ -48,8 +48,7 @@
                             <div class="comment_main_footer_time"> {{ root_comment.created_at|date:"Y-m-d"}}</div>
                             <div class="comment_main_footer_tool">
                                 <button class="comment_reply" onclick="" lay-on="comment_repeat" data-belong-to-comment="{{root_comment.id}}" data-repeat-someone="{{root_comment.author}}"><i class="fa-solid fa-reply fa-2xl"></i></button>
-                                <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
-                                <span>0</span>
+                                <button class="comment_thumbs_up" data-comment-id="{{root_comment.id}}"><i class="fa-regular fa-heart fa-2xl"></i><span style="margin-left: 10px;">{{root_comment.thumbs_up}}</span></button>
                             </div>
                         </div>
                     </div>
@@ -71,8 +70,7 @@
                             <div class="comment_main_footer_time"> {{ child_comment.created_at|date:"Y-m-d" }}</div>
                             <div class="comment_main_footer_tool">
                                 <button class="comment_reply" onclick="" lay-on="comment_repeat" data-belong-to-comment="{{root_comment.id}}" data-repeat-someone="{{child_comment.author}}"><i class="fa-solid fa-reply fa-2xl"></i></button>
-                                <button class="comment_thumbs_up"><i class="fa-solid fa-thumbs-up fa-2xl"></i></button>
-                                <span>0</span>
+                                <button class="comment_thumbs_up" data-comment-id="{{child_comment.id}}"><i class="fa-regular fa-heart fa-2xl"></i><span style="margin-left: 10px;">{{child_comment.thumbs_up}}</span></button>
                             </div>
                         </div>
                     </div>
@@ -98,6 +96,7 @@
     {% endif %}
 </div>
 <script>
+    // markdown内容的输出
     var markdownContent = document.querySelector('.markdown-content');
     var data = '{{ markdown.content|escapejs }}';
     console.log(data);
@@ -110,7 +109,6 @@
     var html = converter.makeHtml(data);
     markdownContent.innerHTML = html;
 </script>
-<script src="//unpkg.com/layui@2.9.7/dist/layui.js"></script> 
 <script>
 layui.use(function(){
     var layer = layui.layer;
@@ -158,6 +156,41 @@ layui.use(function(){
         });
     },
   })
+});
+</script>
+<script>
+$('.comment_thumbs_up').click(function() {
+    var csrftoken = '{{ csrf_token }}'; // 获取 CSRF 令牌
+    var icon = $(this).find('i.fa-heart');
+    var span = $(this).find('span'); // 找到 span
+    var commentId = $(this).data('comment-id'); // 获取评论的 ID
+
+    var isLike = icon.hasClass('fa-regular');
+    var url = isLike ? 'like_comment' : 'dislike_comment'; // 根据是否点赞选择不同的 URL
+
+    // 向后端发送 POST 请求
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {comment_id: commentId},
+        headers: {'X-CSRFToken': csrftoken}, // 添加 CSRF 令牌到请求头部
+        success: function(data) {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                // 更新图标和点赞数
+                var count = parseInt(span.text()) || 0;
+                if (isLike) {
+                    icon.removeClass('fa-regular').addClass('fa-solid');
+                    count += 1;
+                } else {
+                    icon.removeClass('fa-solid').addClass('fa-regular');
+                    count -= 1;
+                }
+                span.text(count);
+            }
+        }
+    });
 });
 </script>
 {% endblock %}

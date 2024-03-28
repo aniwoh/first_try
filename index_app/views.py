@@ -67,3 +67,17 @@ def post_comment(request):
 
 def format_date(date):
     return date.strftime("%Y-%m-%d")
+
+def like_comment(request):
+    comment_id=request.POST.get('comment_id')
+    comment=Comments.objects.get(id=comment_id)
+    comment.thumbs_up+=1
+    comment.save()
+    return JsonResponse({'status':'success','thumbs_up':comment.thumbs_up})
+
+def dislike_comment(request):
+    comment_id=request.POST.get('comment_id')
+    comment=Comments.objects.get(id=comment_id)
+    comment.thumbs_up-=1
+    comment.save()
+    return JsonResponse({'status':'success','thumbs_up':comment.thumbs_up})
