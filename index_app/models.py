@@ -8,6 +8,7 @@ class MarkdownFilePool(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     comment_count = models.IntegerField(default=0)
     view_count = models.IntegerField(default=0)
+    thumbs_up = models.IntegerField(default=0)
 
 class Comments(models.Model):
     content = models.TextField(max_length=100)
