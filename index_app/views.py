@@ -58,8 +58,8 @@ def post_comment(request):
         content=request.POST['text']
         article_id=request.POST['now-article']
         author=request.user.username
-        belong_to_comment=request.POST['belong_to_comment']
-        repeatSomeone=request.POST['repeatSomeone']
+        belong_to_comment=request.POST.get('belong_to_comment',0)
+        repeatSomeone=request.POST.get('repeatSomeone','')
         comment=Comments(content=content,article_id=article_id,author=author,belong_to_comment=belong_to_comment,repeat_someone=repeatSomeone)
         print(comment)
         comment.save()
