@@ -14,8 +14,14 @@
         <!-- 这里是markdown内容的输出位置，通过js输出 -->
     </div>
     <div class="tool_bar_border">
+        <div class="article-tags" style="font-size: larger; margin-right: 10px;">
+            标签：
+            {% for tag in tags %}
+                <a href="{{ tag.id }}">#{{ tag.name }}</a>
+            {% endfor %}
+        </div>
         <div class="tool_bar">
-            <button class="article_share"><i class="fa-solid fa-share fa-2xl"></i></button>
+            <button class="article_share" lay-on="article_share"><i class="fa-solid fa-share fa-2xl"></i></button>
             <button class="article_thumbs_up" data-article-id="{{markdown.id}}"><i class="fa-regular fa-heart fa-2xl"></i><span style="margin-left: 10px;">{{markdown.thumbs_up}}</span></button>
         </div>
     </div>
@@ -234,4 +240,22 @@ $('.comment_thumbs_up').click(function() {
         });
     });
     </script>
+<script>
+    layui.use(function(){
+        var layer = layui.layer;
+        var util = layui.util;
+        util.on('lay-on', {
+            article_share: function(){
+                var url = window.location.href;
+                var input = document.createElement('input');
+                document.body.appendChild(input);
+                input.setAttribute('value', url);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                layer.msg('网址已复制');
+            },
+        })
+    })
+</script>
 {% endblock %}

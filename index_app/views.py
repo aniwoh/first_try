@@ -29,6 +29,7 @@ def post(request):
         'next_record': next_record,
         'root_comments':root_comments,
         'child_comments':child_comments,
+        'tags':markdown.tags.all(),
     }
     return render(request, 'index/post.html', context)
 

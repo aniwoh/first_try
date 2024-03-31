@@ -1,5 +1,8 @@
 from django.db import models
 
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+
 # Create your models here.
 class MarkdownFilePool(models.Model):
     title = models.CharField(max_length=100)
@@ -9,6 +12,7 @@ class MarkdownFilePool(models.Model):
     comment_count = models.IntegerField(default=0)
     view_count = models.IntegerField(default=0)
     thumbs_up = models.IntegerField(default=0)
+    tags = models.ManyToManyField(Tag)
 
 class Comments(models.Model):
     content = models.TextField(max_length=100)
