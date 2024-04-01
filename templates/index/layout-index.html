@@ -42,13 +42,13 @@
             </div>
             <hr class="line">
             <ul class="list">
-                <li class="active">
+                <li>
                     <i class="fa-solid fa-home"></i>
-                    <span>Home</span>
+                    <span><a href="/index/">Home</a></span>
                 </li>
                 <li>
                     <i class="fa-solid fa-list"></i>
-                    <span>Category</span>
+                    <span><a href="/index/category">Category</a></span>
                 </li>
                 <li>
                     <i class="fa-solid fa-clock"></i>
@@ -79,5 +79,18 @@
         </div>
     </div>
 </body>
-
+<script>
+    var currentPage = window.location.pathname;
+    var listItems = document.querySelectorAll('.list li');
+    // Loop through each list item
+    listItems.forEach(function(item) {
+        // Get the link URL of the list item
+        var link = item.querySelector('a').getAttribute('href');
+        // Check if the link URL matches the current page URL
+        if (link === currentPage) {
+            // Add the "active" class to the list item
+            item.classList.add('active');
+        }
+    });
+</script>
 </html>

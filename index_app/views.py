@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import MarkdownFilePool
 from index_app.models import Comments
+from index_app.models import Tag
 from django.urls import reverse
 from django.http import JsonResponse
 from django.core import serializers
@@ -35,8 +36,12 @@ def post(request):
 
 def index(request):
     posts = MarkdownFilePool.objects.all()
+    tags = Tag.objects.all()
+    tag_data = [{'title': tag.name, 'id': tag.id} for tag in tags]
     context = {
         'posts':posts,
+        'tags':Tag.objects.all(),
+        'tag_data':tag_data,
     }
     return render(request, 'index/index.html', context)
 
@@ -52,6 +57,26 @@ def proxy_api(request):
         return response
     else:
         return JsonResponse({'error': 'API request failed'}, status=500)
+
+def category(request):
+    context = {
+    }
+    return render(request, 'index/category.html',context)
+
+def filter_articles(request):
+    tag_id=request.GET.get('tag_id')
+    if int(tag_id) >= 0:
+        tag=Tag.objects.get(id=tag_id)
+        articles=tag.markdownfilepool_set.all()
+    elif int(tag_id) == -1:
+        articles=MarkdownFilePool.objects.all()
+    elif int(tag_id) == -2:
+        articles=MarkdownFilePool.objects.all().order_by('-thumbs_up')
+    elif int(tag_id) == -3:
+        articles=MarkdownFilePool.objects.all().order_by('-view_count')
+    else:
+        articles=MarkdownFilePool.objects.all()
+    return render(request,'index/filter_articles.html',{'posts':articles})
 
 @login_required
 def post_comment(request):
