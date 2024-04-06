@@ -60,15 +60,17 @@ def setting(request):
 def upload_view(request):
     if request.method == 'POST':
         title = request.POST['title']
-        author = request.POST['author']
-        markdown_file = request.FILES['markdown_file']
-        
+        author = request.user.username
+        markdown_file = request.FILES['file']
         # 将Markdown内容读取并存储到数据库
         content = markdown_file.read().decode('utf-8')
         markdown = MarkdownFilePool(title=title, content=content, author=author)
         markdown.save()
         
         return redirect('/homepage/list')
+    elif request.method == 'GET':
+        print('GET')
+        return render(request,'homepage/upload.html')
     
     return redirect('/homepage/list')
 
@@ -83,6 +85,21 @@ def get_user_json_api(request):
     user_dict={'code':0,'msg':'','count':len(users),'data':users_list}
     # user_json_data = json.dumps(user_dict)
     return JsonResponse(user_dict)
+
+@login_required
+def get_markdown_json_api(request):
+    current_user_level = request.user.level
+    if current_user_level==6: # 为超级管理员
+        markdown=MarkdownFilePool.objects.all().values('id','title','author','content','created_at','comment_count','view_count','thumbs_up')
+    else:
+        markdown=MarkdownFilePool.objects.filter(author=request.user.username).values('id','title','author','content','created_at','comment_count','view_count','thumbs_up')
+    markdown_list=[]
+    for i in markdown:
+        i['created_at']=i['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+        markdown_list.append(i)
+    markdown_dict={'code':0,'msg':'','count':len(markdown),'data':markdown_list}
+    # user_json_data = json.dumps(user_dict)
+    return JsonResponse(markdown_dict)
 
 def replace_level(level):
     # 致敬《魔禁》
