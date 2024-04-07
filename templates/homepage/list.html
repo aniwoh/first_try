@@ -82,9 +82,12 @@ layui.use(['table', 'dropdown'], function(){
     if(obj.event === 'edit'){
       layer.open({
         title: '正在编辑 - id:'+ data.id,
-        type: 1,
-        area: ['60%','60%'],
-        content: '<div style="padding: 16px;"><form class="layui-form layui-form-pane" action="" style="background-color: rgba(230, 235, 240, 0.6);padding: 16px;;"><div class="layui-form-item"><label class="layui-form-label">用户名</label><div class="layui-input-block"><input type="text" name="username" autocomplete="off" placeholder="请输入" lay-verify="required" class="layui-input"></div></div><div class="layui-form-item"><label class="layui-form-label">密码</label><div class="layui-input-block"><input type="password" name="password" autocomplete="off" placeholder="请输入" lay-verify="required" class="layui-input"></div></div><div class="layui-form-item"><label class="layui-form-label">等级</label><div class="layui-input-block"><input type="text" name="level" autocomplete="off" placeholder="请输入0-6间的数字" lay-verify="required" class="layui-input"></div></div><div class="layui-form-item"><button class="layui-btn" lay-submit lay-filter="demo2">确认修改</button></div></form></div>'
+        type: 2,
+        area: ['680px', '520px'],
+        content: './edit?id='+ data.id,
+        fixed: false, // 不固定
+        maxmin: true,
+        shadeClose: true,
       });
     } else if(obj.event === 'more'){
       // 更多 - 下拉菜单
@@ -100,14 +103,14 @@ layui.use(['table', 'dropdown'], function(){
         }],
         click: function(menudata){
           if(menudata.id === 'detail'){
-            layer.msg('查看操作.当前行内容为:'+ JSON.stringify(obj.data));
+            window.location.href = '/post?id='+data.id;
           } else if(menudata.id === 'del'){
             layer.confirm('真的删除行 [id: '+ data.id +'] 么', function(index){
               obj.del(); // 删除对应行（tr）的DOM结构
               layer.close(index);
               // 向服务端发送删除指令
               $.ajax({
-                url: './delete_user',
+                url: './delete_article',
                 type: 'POST',
                 data: { 
                     id: data.id,

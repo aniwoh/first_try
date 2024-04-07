@@ -4,6 +4,7 @@ from index_app.models import MarkdownFilePool,Tag
 from django.http import JsonResponse
 import json
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -137,3 +138,22 @@ def delete_user(request):
     user_id = request.POST['id']
     User.objects.filter(id=user_id).delete()
     return redirect('/homepage/userall')
+
+@login_required
+def delete_article(request):
+    print(request.POST['id'])
+    article_id = request.POST['id']
+    MarkdownFilePool.objects.filter(id=article_id).delete()
+    return redirect('/homepage/list')
+
+@login_required
+def edit(request):
+    data_id = request.GET['id']
+    post=MarkdownFilePool.objects.filter(id=data_id)
+    tags = Tag.objects.all()
+    content={
+        'data_id':data_id,
+        'tags':tags,
+        'post':post,
+    }
+    return render(request,'homepage/edit.html',content)

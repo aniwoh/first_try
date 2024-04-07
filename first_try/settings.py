@@ -151,3 +151,5 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [ 'https://django.aniwoh.top', 'http://django.aniwoh.top', 'http://127.0.0.1:8000', 'http://localhost:8000']
 
 AUTH_USER_MODEL = 'login_app.myuser'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # iframe 允许在相同域名嵌套展示

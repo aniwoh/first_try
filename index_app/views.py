@@ -6,9 +6,7 @@ from index_app.models import Comments
 from index_app.models import Tag
 from django.urls import reverse
 from django.http import JsonResponse
-from django.core import serializers
 import requests
-import datetime
 
 def post(request):
     now_id=request.GET.get('id')
