@@ -22,6 +22,14 @@
       <input type="text" name="title" autocomplete="off" placeholder="请输入" lay-verify="required" class="layui-input">
     </div>
   </div>
+  <div class="layui-form-item">
+    <select lay-search="" lay-creatable="" name="tags" lay-verify="required">
+      <option value="">选择或创建标签</option>
+      {% for tag in tags %}
+      <option value="{{ tag.id }}">{{ tag.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
   <div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag">
     <i class="layui-icon layui-icon-upload"></i> 
     <div>上传你的md文件,限制1MB大小</div>
@@ -59,9 +67,10 @@ layui.use(['table', 'dropdown'], function(){
       {field:'author', title:'作者', sort: true, width: 80},
       {field:'content', title:'内容', width: 120},
       {field:'created_at', title:'创建时间', sort: true, width: 110},
-      {field:'comment_count', title:'评论数', sort: true, width: 100},
-      {field:'view_count', title:'浏览量', sort: true, width: 100},
-      {field:'thumbs_up', title:'点赞数', sort: true, width: 100},
+      {field:'comment_count', title:'评论', sort: true, width: 80},
+      {field:'view_count', title:'浏览', sort: true, width: 80},
+      {field:'thumbs_up', title:'点赞', sort: true, width: 80},
+      {field:'tags', title:'标签', width: 100},
       {fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#barDemo'}
     ]],
 });

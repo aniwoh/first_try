@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from index_app.models import MarkdownFilePool
+from index_app.models import MarkdownFilePool,Tag
 from django.http import JsonResponse
 import json
 from django.contrib.auth import get_user_model
@@ -9,9 +9,7 @@ User = get_user_model()
 
 @login_required
 def home(request):
-    username = request.COOKIES.get('username')
     content={
-        'username':username,
         'current_page':'home',
     }
     return render(request,'homepage/home.html',content)
@@ -19,19 +17,17 @@ def home(request):
 @login_required
 def list(request):
     posts = MarkdownFilePool.objects.all()
-    username = request.COOKIES.get('username')
+    tags = Tag.objects.all()
     content={
-        'username':username,
         'current_page':'list',
-        'posts':posts
+        'posts':posts,
+        'tags':tags,
     }
     return render(request,'homepage/list.html',content)
 
 @login_required
 def data(request):
-    username = request.COOKIES.get('username')
     content={
-        'username':username,
         'current_page':'data',
     }
     return render(request,'homepage/data.html',content)
@@ -39,9 +35,7 @@ def data(request):
 @login_required
 def userall(request):
     users=User.objects.all().values('username','is_superuser','date_joined')
-    username = request.COOKIES.get('username')
     content={
-        'username':username,
         'current_page':'userall',
         'users':users
     }
@@ -49,9 +43,7 @@ def userall(request):
 
 @login_required
 def setting(request):
-    username = request.COOKIES.get('username')
     content={
-        'username':username,
         'current_page':'setting',
     }
     return render(request,'homepage/setting.html',content)
@@ -59,6 +51,16 @@ def setting(request):
 @login_required
 def upload_view(request):
     if request.method == 'POST':
+        tags= request.POST['tags']
+        if not tags.isdigit():
+            Tag.objects.create(name=tags)
+            tag_id = Tag.objects.get(name=tags).id
+            print(tag_id)
+        else: # 是纯数字
+            if Tag.objects.filter(id=tags).exists():
+                tag_id = tags
+            else:
+                tag_id = 0  # 0 代表没有标签
         title = request.POST['title']
         author = request.user.username
         markdown_file = request.FILES['file']
@@ -66,7 +68,7 @@ def upload_view(request):
         content = markdown_file.read().decode('utf-8')
         markdown = MarkdownFilePool(title=title, content=content, author=author)
         markdown.save()
-        
+        markdown.tags.add(tag_id)
         return redirect('/homepage/list')
     elif request.method == 'GET':
         print('GET')
@@ -96,6 +98,15 @@ def get_markdown_json_api(request):
     markdown_list=[]
     for i in markdown:
         i['created_at']=i['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+        markdown=MarkdownFilePool.objects.filter(id=i['id']).values('tags')
+        tag_list=[]
+        for j in markdown:
+            if j['tags']== None:
+                tag_name='无标签'
+            else:
+                tag_name=Tag.objects.filter(id=j['tags']).values('name')[0]['name']
+            tag_list.append(tag_name)
+        i['tags']=tag_list
         markdown_list.append(i)
     markdown_dict={'code':0,'msg':'','count':len(markdown),'data':markdown_list}
     # user_json_data = json.dumps(user_dict)
