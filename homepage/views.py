@@ -52,16 +52,20 @@ def setting(request):
 @login_required
 def upload_view(request):
     if request.method == 'POST':
-        tags= request.POST['tags']
-        if not tags.isdigit():
-            Tag.objects.create(name=tags)
-            tag_id = Tag.objects.get(name=tags).id
-            print(tag_id)
-        else: # 是纯数字
-            if Tag.objects.filter(id=tags).exists():
-                tag_id = tags
-            else:
-                tag_id = 0  # 0 代表没有标签
+        print(request.POST)
+        tags= request.POST.getlist('tags',[])
+        temp_list=[]
+        for i in tags:
+            if not i.isdigit():
+                Tag.objects.create(name=i)
+                tag_id = Tag.objects.get(name=i).id
+                temp_list.append(tag_id)
+            else: # 是纯数字
+                if Tag.objects.filter(id=i).exists():
+                    temp_list.append(i)
+                else:
+                    continue
+        tags=temp_list
         title = request.POST['title']
         author = request.user.username
         markdown_file = request.FILES['file']
@@ -69,7 +73,8 @@ def upload_view(request):
         content = markdown_file.read().decode('utf-8')
         markdown = MarkdownFilePool(title=title, content=content, author=author)
         markdown.save()
-        markdown.tags.add(tag_id)
+        for tag_id in tags:
+            markdown.tags.add(tag_id)
         return redirect('/homepage/list')
     elif request.method == 'GET':
         print('GET')

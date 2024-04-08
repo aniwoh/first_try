@@ -22,18 +22,29 @@
       <input type="text" name="title" autocomplete="off" placeholder="请输入" lay-verify="required" class="layui-input">
     </div>
   </div>
-  <div class="layui-form-item">
-    <select lay-search="" lay-creatable="" name="tags" lay-verify="required">
+  <!-- <div class="layui-form-item">
+    <select lay-search="" lay-creatable="" name="tag" lay-verify="required">
       <option value="">选择或创建标签</option>
       {% for tag in tags %}
       <option value="{{ tag.id }}">{{ tag.name }}</option>
       {% endfor %}
     </select>
+  </div> -->
+  <div class="layui-form" id="tag-checkbox">
+    <label class="layui-form-label">标签</label>
+    {% for tag in tags %}
+      <input type="checkbox" name="tags" title="{{ tag.name }}" value="{{ tag.id }}">
+    {% endfor %}
   </div>
-  <div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag">
+  <div class="layui-form">
+    <button type="button" class="layui-btn" lay-on="add-new-tag">添加新标签</button>
+  </div>
+  <div class="layui-form">
+    <div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag">
     <i class="layui-icon layui-icon-upload"></i> 
     <div>上传你的md文件,限制1MB大小</div>
     <div>点击上传,或将文件拖拽到此处</div>
+  </div>
   </div>
   <div class="layui-form-item">
     <button class="layui-btn" lay-submit lay-filter="demo2" id="ID-upload-demo-action">上传文章</button>
@@ -151,6 +162,39 @@ layui.use(['table', 'dropdown'], function(){
     });
   });
   </script>
+<script>
+  layui.use(['form'],function(){
+  var layer = layui.layer;
+  var util = layui.util;
+  var form = layui.form;
+  // 事件
+  util.on('lay-on', {
+    'add-new-tag': function(){
+      layer.prompt({title: '请输入新标签名'}, function(value, index, elem){
+        if(value === '') return elem.focus();
+        // layer.msg('获得：'+ util.escape(value)); // 显示 value
+        if(!isNaN(util.escape(value))) return layer.msg('标签不合法，不允许使用纯数字标签')
+        // 创建 checkbox 元素
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'tags';
+        checkbox.value = util.escape(value);
+        checkbox.title = util.escape(value);
+        // 添加 checkbox 元素到 DOM
+        var container = document.getElementById('tag-checkbox');
+        container.appendChild(checkbox);
+
+        // 渲染 checkbox 元素
+        form.render('checkbox');
+
+        // 关闭 prompt
+        layer.close(index);
+      });
+    },
+  })
+});
+</script>
+</script>
 </body>
 </html>
 
