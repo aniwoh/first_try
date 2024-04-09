@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'index_app',
     'login_app',
     'homepage',
+    'api',
 ]
 
 MIDDLEWARE = [
