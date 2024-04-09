@@ -12,7 +12,6 @@ urlpatterns = [
     path('index/',include('index_app.urls')),
     path('user/',include('login_app.urls')),
     path('homepage/',include('homepage.urls')),
-    path('layer/<str:page_name>.html',views.layer_view,name='layer'),
 ]
 
 # 将自定义的视图与 400 错误关联
