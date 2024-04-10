@@ -56,7 +56,7 @@ layui.use(['table', 'dropdown'], function(){
   
   table.render({
     elem: '#userall',
-    url: './get_user_json',
+    url: '/api/get_user_json',
     height: 'full-50', // 最大高度减去其他容器已占有的高度差
     cellMinWidth: 80,
     page: true,
@@ -101,7 +101,7 @@ layui.use(['table', 'dropdown'], function(){
               layer.close(index);
               // 向服务端发送删除指令
               $.ajax({
-                url: './delete_user',
+                url: '/api/delete_user',
                 type: 'POST',
                 data: { 
                     id: data.id,

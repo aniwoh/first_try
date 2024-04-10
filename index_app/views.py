@@ -75,34 +75,3 @@ def post_comment(request):
         print(comment)
         comment.save()
         return redirect(f'/index/post?id={article_id}')
-
-def format_date(date):
-    return date.strftime("%Y-%m-%d")
-
-def like_comment(request):
-    comment_id=request.POST.get('comment_id')
-    comment=Comments.objects.get(id=comment_id)
-    comment.thumbs_up+=1
-    comment.save()
-    return JsonResponse({'status':'success','thumbs_up':comment.thumbs_up})
-
-def dislike_comment(request):
-    comment_id=request.POST.get('comment_id')
-    comment=Comments.objects.get(id=comment_id)
-    comment.thumbs_up-=1
-    comment.save()
-    return JsonResponse({'status':'success','thumbs_up':comment.thumbs_up})
-
-def like_article(request):
-    article_id=request.POST.get('article_id')
-    markdown=MarkdownFilePool.objects.get(id=article_id)
-    markdown.thumbs_up+=1
-    markdown.save()
-    return JsonResponse({'status':'success','thumbs_up':markdown.thumbs_up})
-
-def dislike_article(request):
-    article_id=request.POST.get('article_id')
-    markdown=MarkdownFilePool.objects.get(id=article_id)
-    markdown.thumbs_up-=1
-    markdown.save()
-    return JsonResponse({'status':'success','thumbs_up':markdown.thumbs_up})

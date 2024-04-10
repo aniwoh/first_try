@@ -10,7 +10,7 @@
     background-color: rgba(230, 235, 240, 0.7);
 }
 
-.post {
+.post-list {
     margin-top: 40px;
     display: flex;
     flex-direction: column;

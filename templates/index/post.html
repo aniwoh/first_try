@@ -178,7 +178,7 @@ $('.comment_thumbs_up').click(function() {
     var commentId = $(this).data('comment-id'); // 获取评论的 ID
 
     var isLike = icon.hasClass('fa-regular');
-    var url = isLike ? 'like_comment' : 'dislike_comment'; // 根据是否点赞选择不同的 URL
+    var url = isLike ? '/api/like_comment' : '/api/dislike_comment'; // 根据是否点赞选择不同的 URL
 
     // 向后端发送 POST 请求
     $.ajax({
@@ -213,7 +213,7 @@ $('.comment_thumbs_up').click(function() {
         var articleId = $(this).data('article-id'); // 获取评论的 ID
     
         var isLike = icon.hasClass('fa-regular');
-        var url = isLike ? 'like_article' : 'dislike_article'; // 根据是否点赞选择不同的 URL
+        var url = isLike ? '/api/like_article' : '/api/dislike_article'; // 根据是否点赞选择不同的 URL
     
         // 向后端发送 POST 请求
         $.ajax({
