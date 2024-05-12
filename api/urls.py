@@ -15,4 +15,5 @@ urlpatterns = [
     path('filter_articles',views.filterArticles,name='filter_articles'),
     path('apiGetAllArticles',views.getAllArticles,name='apiGetAllArticles'),
     path('search_articles',views.searchArticles,name='search_articles'),
+    path('get_article',views.getArticle,name='get_article'),
 ]

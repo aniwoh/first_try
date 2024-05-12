@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="{% static 'css/comment_style.css' %}">
 <div class="markdown-main">
     <div class="markdown-title">
-        {{markdown.title}}
+        <!-- 这里是标题的输出位置，通过js输出 -->
     </div>
     <div class="markdown-author">
-        {{markdown.view_count}}浏览     |    {{markdown.created_at}}    |    {{markdown.author}}
+        <!-- 这里是作者、时间、浏览量的输出位置，通过js输出 -->
     </div>
     <div class="markdown-content">
         <!-- 这里是markdown内容的输出位置，通过js输出 -->
@@ -16,13 +16,10 @@
     <div class="tool_bar_border">
         <div class="article-tags" style="font-size: larger; margin-right: 10px;">
             标签：
-            {% for tag in tags %}
-                <a href="{{ tag.id }}">#{{ tag.name }}</a>
-            {% endfor %}
         </div>
         <div class="tool_bar">
             <button class="article_share" lay-on="article_share"><i class="fa-solid fa-share fa-2xl"></i></button>
-            <button class="article_thumbs_up" data-article-id="{{markdown.id}}"><i class="fa-regular fa-heart fa-2xl"></i><span style="margin-left: 10px;">{{markdown.thumbs_up}}</span></button>
+            <button class="article_thumbs_up"><i class="fa-regular fa-heart fa-2xl"></i><span style="margin-left: 10px;" id="thumbs_up"></span></button>
         </div>
     </div>
     <div class="comment_post" >
@@ -96,10 +93,33 @@
     </div>
 </div>
 <script>
-    // markdown内容的输出
-    var markdownContent = document.querySelector('.markdown-content');
-    var data = '{{ markdown.content|escapejs }}';
-    console.log(data);
+    const csrftoken = document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
+    // 先从地址栏解析出id
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    // 通过id获取文章的json对象
+    axios.get(`/api/get_article`,{params:{id:id}})
+    .then(response => {
+        const article = response.data.data;
+        console.log(article);
+        showHeader(article);
+        showMarkdown(article);
+        showOther(article);
+    }).catch(error => {
+        console.error(error);
+    });
+</script>
+<script>
+// 展示markdown内容
+function showHeader(article) {
+    const markdownTitle = document.querySelector('.markdown-title');
+    const markdownAuthor = document.querySelector('.markdown-author');
+    markdownTitle.innerText = article.title;
+    markdownAuthor.innerText = `${article.view_count}浏览     |    ${article.created_at}    |    ${article.author}`;
+}
+function showMarkdown(article) {
+    const markdownContent = document.querySelector('.markdown-content');
+    const data = article.content;
     var converter = new showdown.Converter({
         tables:true,
         metadata: true,
@@ -108,6 +128,19 @@
     });
     var html = converter.makeHtml(data);
     markdownContent.innerHTML = html;
+}
+
+function showOther(article){
+    const articleTags = document.querySelector('.article-tags');
+    const tags = article.tags;
+    document.querySelector('#thumbs_up').innerHTML = article.thumbs_up; // 点赞数
+    tags.forEach(tag => {
+        const tagElement = document.createElement('a');
+        tagElement.href = `/tag/${tag}`;
+        tagElement.innerText = `#${tag}`;
+        articleTags.appendChild(tagElement);
+    });
+}
 </script>
 <script>
 layui.use(function(){
@@ -145,7 +178,6 @@ layui.use(function(){
                 console.log(data);
             })
             .catch(error => {
-                // Handle any errors that occurred during the request
                 console.error(error);
             });
             layer.msg('评论成功,网页将自动刷新');
@@ -157,44 +189,26 @@ layui.use(function(){
 });
 </script>
 <script>
-function getCookie(name) {
-    let cookieName = name + "=";
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        let cookie = cookies[i].trim();
-        if (cookie.indexOf(cookieName) === 0) {
-            return decodeURIComponent(cookie.substring(cookieName.length));
-        }
-    }
-    return null;
-}
 layui.use(['jquery','layer'],function(){
     var $ = layui.jquery;
     var layer = layui.layer;
-    $('#myButton').on('click', function(){
-      // 在按钮点击时弹出提示框
-      layer.msg('按钮被点击了');
-    }); 
-});
-$('.comment_thumbs_up').click(function() {
-    var csrftoken = getCookie('csrftoken'); // 获取 CSRF 令牌
-    console.log(csrftoken);
-    var icon = $(this).find('i.fa-heart');
-    var span = $(this).find('span'); // 找到 span
-    var commentId = $(this).data('comment-id'); // 获取评论的 ID
-
-    var isLike = icon.hasClass('fa-regular');
-    var url = isLike ? '/api/like_comment' : '/api/dislike_comment'; // 根据是否点赞选择不同的 URL
-
-    // 向后端发送 POST 请求
-    $.ajax({
-        url: url,
-        type: 'post',
-        data: {comment_id: commentId},
-        headers: {'X-CSRFToken': csrftoken}, // 添加 CSRF 令牌到请求头部
-        success: function(data) {
-            if (data.error) {
-                alert(data.error);
+    $('.comment_thumbs_up').on('click', function(){
+        console.log(csrftoken);
+        var icon = $(this).find('i.fa-heart');
+        var span = $(this).find('span'); // 找到 span
+        var commentId = $(this).data('comment-id'); // 获取评论的 ID
+        var isLike = icon.hasClass('fa-regular');
+        var url = isLike ? '/api/like_comment' : '/api/dislike_comment'; // 根据是否点赞选择不同的 URL
+        axios.post(url,{
+            comment_id:commentId
+        },{
+            headers:{
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => {
+            if (response.data.error) {
+                alert(response.data.error);
             } else {
                 // 更新图标和点赞数
                 var count = parseInt(span.text()) || 0;
@@ -207,62 +221,48 @@ $('.comment_thumbs_up').click(function() {
                 }
                 span.text(count);
             }
-        }
+        }).catch(error => {
+            console.error(error);
+        }); 
     });
-});
-</script>
-<script>
-    $('.article_thumbs_up').click(function() {
-        var csrftoken = '{{ csrf_token }}'; // 获取 CSRF 令牌
+    $('.article_thumbs_up').on('click' ,function(){
         var icon = $(this).find('i.fa-heart');
         var span = $(this).find('span'); // 找到 span
-        var articleId = $(this).data('article-id'); // 获取评论的 ID
-    
         var isLike = icon.hasClass('fa-regular');
         var url = isLike ? '/api/like_article' : '/api/dislike_article'; // 根据是否点赞选择不同的 URL
-    
         // 向后端发送 POST 请求
-        $.ajax({
-            url: url,
-            type: 'post',
-            data: {article_id: articleId},
-            headers: {'X-CSRFToken': csrftoken}, // 添加 CSRF 令牌到请求头部
-            success: function(data) {
-                if (data.error) {
-                    alert(data.error);
+        axios.post(url,{article_id:id},{headers:{'X-CSRFToken': csrftoken}})
+        .then(response => {
+            if (response.data.error) {
+                alert(response.data.error);
+            } else {
+                // 更新图标和点赞数
+                var count = parseInt(span.text()) || 0;
+                if (isLike) {
+                    icon.removeClass('fa-regular').addClass('fa-solid');
+                    count += 1;
                 } else {
-                    // 更新图标和点赞数
-                    var count = parseInt(span.text()) || 0;
-                    if (isLike) {
-                        icon.removeClass('fa-regular').addClass('fa-solid');
-                        count += 1;
-                    } else {
-                        icon.removeClass('fa-solid').addClass('fa-regular');
-                        count -= 1;
-                    }
-                    span.text(count);
+                    icon.removeClass('fa-solid').addClass('fa-regular');
+                    count -= 1;
                 }
+                span.text(count);
             }
-        });
-    });
-    </script>
-<script>
-    layui.use(function(){
-        var layer = layui.layer;
-        var util = layui.util;
-        util.on('lay-on', {
-            article_share: function(){
-                var url = window.location.href;
-                var input = document.createElement('input');
-                document.body.appendChild(input);
-                input.setAttribute('value', url);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                layer.msg('网址已复制');
-            },
         })
+        .catch(error => {
+            console.error(error);
+        });
     })
-</script>
+    $('.article_share').on('click', function(){
+        var url = window.location.href;
+        var input = document.createElement('input');
+        document.body.appendChild(input);
+        input.setAttribute('value', url);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        layer.msg('网址已复制');
+    });
 
+});
+</script>
 {% endblock %}

@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from index_app.models import Comments, MarkdownFilePool, Tag
 from django.contrib.auth import get_user_model
 import json
+from django.forms import model_to_dict
 from datetime import date, datetime
 User = get_user_model()
 
@@ -33,9 +34,18 @@ def proxyGetCardImage(request):
 def getAllArticles(request):
     return get_article(-1)
 
+def getArticle(request):
+    article_id=request.GET.get('id')
+    article =MarkdownFilePool.objects.get(id=article_id)
+    articleDict=model_to_dict(article)
+    articleDict['created_at'] = article.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    articleDict['tags'] = [i.name for i in articleDict['tags']]
+    data={'code':0,'msg':'','data':articleDict}
+    return JsonResponse(data)
+
 @login_required
 def likeComment(request):
-    comment_id=request.POST.get('comment_id')
+    comment_id=json.loads(request.body).get('comment_id')
     comment=Comments.objects.get(id=comment_id)
     comment.thumbs_up+=1
     comment.save()
@@ -43,7 +53,7 @@ def likeComment(request):
 
 @login_required
 def dislikeComment(request):
-    comment_id=request.POST.get('comment_id')
+    comment_id=json.loads(request.body).get('comment_id')
     comment=Comments.objects.get(id=comment_id)
     comment.thumbs_up-=1
     comment.save()
@@ -51,16 +61,17 @@ def dislikeComment(request):
 
 @login_required
 def likeArticle(request):
-    article_id=request.POST.get('article_id')
-    markdown=MarkdownFilePool.objects.get(id=article_id)
+    article_id=json.loads(request.body).get('article_id')
+    print(article_id)
+    markdown=MarkdownFilePool.objects.get(id=int(article_id))
     markdown.thumbs_up+=1
     markdown.save()
     return JsonResponse({'status':'success','thumbs_up':markdown.thumbs_up})
 
 @login_required
 def dislikeArticle(request):
-    article_id=request.POST.get('article_id')
-    markdown=MarkdownFilePool.objects.get(id=article_id)
+    article_id=json.loads(request.body).get('article_id')
+    markdown=MarkdownFilePool.objects.get(id=int(article_id))
     markdown.thumbs_up-=1
     markdown.save()
     return JsonResponse({'status':'success','thumbs_up':markdown.thumbs_up})
@@ -82,18 +93,7 @@ def filterArticles(request):
 def searchArticles(request):
     keyword=request.GET.get('keyword')
     articles=MarkdownFilePool.objects.filter(title__contains=keyword).values('title','id','view_count','thumbs_up','comment_count','created_at','author','tags__name')
-    article_list=[]
-    flag = True
-    for i in articles:
-        tag_list=[i['tags__name']]
-        i['tags__name']=[i['tags__name']]
-        for j in article_list:
-            if j['id']==i['id']:
-                j['tags__name'].append(tag_list[0])
-                flag=False
-        if flag:
-            article_list.append(i)
-        flag = True
+    article_list=articleHelper(articles)
     data={'code':0,'msg':'','data':article_list}
     return JsonResponse(data)
 @login_required
@@ -155,7 +155,11 @@ def get_article(tag_id):
     else:
         articles=MarkdownFilePool.objects.all()
     articles =articles.values('title','id','view_count','thumbs_up','comment_count','created_at','author','tags__name')
-    print(articles)
+    article_list=articleHelper(articles)
+    data={'code':0,'msg':'','data':article_list}
+    return JsonResponse(data)
+
+def articleHelper(articles):
     article_list=[]
     flag = True
     for i in articles:
@@ -168,5 +172,4 @@ def get_article(tag_id):
         if flag:
             article_list.append(i)
         flag = True
-    data={'code':0,'msg':'','data':article_list}
-    return JsonResponse(data)
+    return article_list

@@ -13,7 +13,6 @@
 <div style="padding: 16px;background-color: rgba(230, 235, 240, 0.6)"> 
   <table class="layui-hide" id="markdownall" lay-filter="markdownall"></table>
 </div>
-<!-- 给容器追加 class="layui-form-pane"，即可显示为方框风格 -->
 <form class="layui-form layui-form-pane" enctype="multipart/form-data" method="post" action="{% url 'upload' %}" style="background-color: rgba(230, 235, 240, 0.6);padding: 16px;;">
   {% csrf_token %}
   <div class="layui-form-item">
@@ -22,14 +21,6 @@
       <input type="text" name="title" autocomplete="off" placeholder="请输入" lay-verify="required" class="layui-input">
     </div>
   </div>
-  <!-- <div class="layui-form-item">
-    <select lay-search="" lay-creatable="" name="tag" lay-verify="required">
-      <option value="">选择或创建标签</option>
-      {% for tag in tags %}
-      <option value="{{ tag.id }}">{{ tag.name }}</option>
-      {% endfor %}
-    </select>
-  </div> -->
   <div class="layui-form" id="tag-checkbox">
     <label class="layui-form-label">标签</label>
     {% for tag in tags %}
