@@ -130,7 +130,6 @@ layui.use(function(){
     util.on('lay-on', {
         'comment_repeat': function(){
             if (user === 'False') {
-                // 如果用户未登录，显示提示并返回
                 layer.msg('请先登录');
                 return;
             }
@@ -139,7 +138,6 @@ layui.use(function(){
         var now_article = '{{ markdown.id }}';
         layer.prompt({title: '你正在回复'+repeatSomeone+'的评论,id为'+belongToComment, formType: 2}, function(value, index, elem){
             if(value === '') return elem.focus();
-            // Send post request to the backend
             var commentText = value;
             var formData = new FormData();
             formData.append('text', commentText);
@@ -171,8 +169,28 @@ layui.use(function(){
 });
 </script>
 <script>
+function getCookie(name) {
+    let cookieName = name + "=";
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i].trim();
+        if (cookie.indexOf(cookieName) === 0) {
+            return decodeURIComponent(cookie.substring(cookieName.length));
+        }
+    }
+    return null;
+}
+layui.use(['jquery','layer'],function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+    $('#myButton').on('click', function(){
+      // 在按钮点击时弹出提示框
+      layer.msg('按钮被点击了');
+    }); 
+});
 $('.comment_thumbs_up').click(function() {
-    var csrftoken = '{{ csrf_token }}'; // 获取 CSRF 令牌
+    var csrftoken = getCookie('csrftoken'); // 获取 CSRF 令牌
+    console.log(csrftoken);
     var icon = $(this).find('i.fa-heart');
     var span = $(this).find('span'); // 找到 span
     var commentId = $(this).data('comment-id'); // 获取评论的 ID

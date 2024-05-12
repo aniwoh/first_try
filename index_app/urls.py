@@ -7,5 +7,4 @@ urlpatterns = [
     path('post',views.post,name='post'),
     path('category',views.category,name='category'),
     path('post_comment', views.post_comment, name='post_comment'),
-    path('filter_articles', views.filter_articles, name='filter_articles'),
 ]

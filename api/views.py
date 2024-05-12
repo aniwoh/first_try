@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
 import requests
 from django.http import HttpResponse, JsonResponse
 from index_app.models import Comments, MarkdownFilePool, Tag
@@ -18,7 +17,7 @@ class ComplexEncoder(json.JSONEncoder):
         else:
             return json.JSONEncoder.default(self, obj)
 
-def proxy_get_index_photo(request):
+def proxyGetCardImage(request):
     # 构建API请求的URL，要求该api返回的结果是一个图片
     api_url = "https://t.mwm.moe/pc"
     response = requests.get(api_url)
@@ -31,11 +30,11 @@ def proxy_get_index_photo(request):
     else:
         return JsonResponse({'error': 'API request failed'}, status=500)
 
-def apiGetAllArticles(request):
+def getAllArticles(request):
     return get_article(-1)
 
 @login_required
-def api_like_comment(request):
+def likeComment(request):
     comment_id=request.POST.get('comment_id')
     comment=Comments.objects.get(id=comment_id)
     comment.thumbs_up+=1
@@ -43,7 +42,7 @@ def api_like_comment(request):
     return JsonResponse({'status':'success','thumbs_up':comment.thumbs_up})
 
 @login_required
-def api_dislike_comment(request):
+def dislikeComment(request):
     comment_id=request.POST.get('comment_id')
     comment=Comments.objects.get(id=comment_id)
     comment.thumbs_up-=1
@@ -51,7 +50,7 @@ def api_dislike_comment(request):
     return JsonResponse({'status':'success','thumbs_up':comment.thumbs_up})
 
 @login_required
-def api_like_article(request):
+def likeArticle(request):
     article_id=request.POST.get('article_id')
     markdown=MarkdownFilePool.objects.get(id=article_id)
     markdown.thumbs_up+=1
@@ -59,14 +58,14 @@ def api_like_article(request):
     return JsonResponse({'status':'success','thumbs_up':markdown.thumbs_up})
 
 @login_required
-def api_dislike_article(request):
+def dislikeArticle(request):
     article_id=request.POST.get('article_id')
     markdown=MarkdownFilePool.objects.get(id=article_id)
     markdown.thumbs_up-=1
     markdown.save()
     return JsonResponse({'status':'success','thumbs_up':markdown.thumbs_up})
 
-def api_get_alltags(request):
+def getAllTags(request):
     tags=Tag.objects.all().values('name','id')
     tags_list=[]
     for i in tags:
@@ -76,11 +75,11 @@ def api_get_alltags(request):
     data={'code':0,'msg':'','data':tags_list}
     return JsonResponse(data)
 
-def api_filter_articles(request):
+def filterArticles(request):
     tag_id=request.GET.get('tag_id')
     return get_article(tag_id)
 
-def api_search_articles(request):
+def searchArticles(request):
     keyword=request.GET.get('keyword')
     articles=MarkdownFilePool.objects.filter(title__contains=keyword).values('title','id','view_count','thumbs_up','comment_count','created_at','author','tags__name')
     article_list=[]
@@ -109,7 +108,7 @@ def api_get_user_json(request):
     return JsonResponse(user_dict)
 
 @login_required
-def api_delete_user(request):
+def delete_user(request):
     user_id = request.POST['id']
     User.objects.filter(id=user_id).delete()
     return JsonResponse({'status':'success'})
