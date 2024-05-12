@@ -13,4 +13,6 @@ urlpatterns = [
     path('delete_user',views.api_delete_user,name='delete_user'),
     path('get_alltags',views.api_get_alltags,name='get_alltags'),
     path('filter_articles',views.api_filter_articles,name='filter_articles'),
+    path('apiGetAllArticles',views.apiGetAllArticles,name='apiGetAllArticles'),
+    path('search_articles',views.api_search_articles,name='search_articles'),
 ]

@@ -31,6 +31,9 @@ def proxy_get_index_photo(request):
     else:
         return JsonResponse({'error': 'API request failed'}, status=500)
 
+def apiGetAllArticles(request):
+    return get_article(-1)
+
 @login_required
 def api_like_comment(request):
     comment_id=request.POST.get('comment_id')
@@ -70,26 +73,16 @@ def api_get_alltags(request):
         i['title']=i['name']
         i.pop('name')
         tags_list.append(i)
-    tags_list=json.dumps(tags_list,ensure_ascii=False)
-    return JsonResponse(tags_list,safe=False)
+    data={'code':0,'msg':'','data':tags_list}
+    return JsonResponse(data)
 
 def api_filter_articles(request):
     tag_id=request.GET.get('tag_id')
-    if int(tag_id) >= 0:
-        tag=Tag.objects.get(id=tag_id)
-        articles=tag.markdownfilepool_set.all()
-    elif int(tag_id) == -1:
-        articles=MarkdownFilePool.objects.all()
-    elif int(tag_id) == -2:
-        articles=MarkdownFilePool.objects.all().order_by('-thumbs_up')
-    elif int(tag_id) == -3:
-        articles=MarkdownFilePool.objects.all().order_by('-view_count')
-    elif int(tag_id) == -4:
-        articles=MarkdownFilePool.objects.all().order_by('-comment_count')
-    else:
-        articles=MarkdownFilePool.objects.all()
-    articles =articles.values('title','id','view_count','thumbs_up','comment_count','created_at','author','tags__name')
-    print(articles)
+    return get_article(tag_id)
+
+def api_search_articles(request):
+    keyword=request.GET.get('keyword')
+    articles=MarkdownFilePool.objects.filter(title__contains=keyword).values('title','id','view_count','thumbs_up','comment_count','created_at','author','tags__name')
     article_list=[]
     flag = True
     for i in articles:
@@ -102,10 +95,8 @@ def api_filter_articles(request):
         if flag:
             article_list.append(i)
         flag = True
-    article_list=json.dumps(article_list,ensure_ascii=False,cls=ComplexEncoder)
-    print(article_list)
-    return JsonResponse(article_list,safe=False)
-
+    data={'code':0,'msg':'','data':article_list}
+    return JsonResponse(data)
 @login_required
 def api_get_user_json(request):
     users=User.objects.all().values('username','is_superuser','date_joined','id','level')
@@ -149,3 +140,34 @@ def replace_level(level):
         return '绝对能力者'
     else:
         return '魔法士'
+
+def get_article(tag_id):
+    if int(tag_id) >= 0:
+        tag=Tag.objects.get(id=tag_id)
+        articles=tag.markdownfilepool_set.all()
+    elif int(tag_id) == -1:
+        articles=MarkdownFilePool.objects.all()
+    elif int(tag_id) == -2:
+        articles=MarkdownFilePool.objects.all().order_by('-thumbs_up')
+    elif int(tag_id) == -3:
+        articles=MarkdownFilePool.objects.all().order_by('-view_count')
+    elif int(tag_id) == -4:
+        articles=MarkdownFilePool.objects.all().order_by('-comment_count')
+    else:
+        articles=MarkdownFilePool.objects.all()
+    articles =articles.values('title','id','view_count','thumbs_up','comment_count','created_at','author','tags__name')
+    print(articles)
+    article_list=[]
+    flag = True
+    for i in articles:
+        tag_list=[i['tags__name']]
+        i['tags__name']=[i['tags__name']]
+        for j in article_list:
+            if j['id']==i['id']:
+                j['tags__name'].append(tag_list[0])
+                flag=False
+        if flag:
+            article_list.append(i)
+        flag = True
+    data={'code':0,'msg':'','data':article_list}
+    return JsonResponse(data)

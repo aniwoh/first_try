@@ -2,75 +2,106 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/index_style.css' %}">
 <div class="main-container">
-    <button class="layui-btn layui-btn-primary layui-btn-radius article-choose" style="right: 10px; position: absolute;">
-        <span>文章筛选</span>
-        <i class="layui-icon layui-icon-down layui-font-12"></i>
-      </button>
-    <div class="post-list" id="post-list">
-        {% for post in posts %}
-        <a href="{% url 'post' %}?id={{ post.id }}" class="post-card">
-            <div class="post-card-img" id="post-{{post.id}}"></div>
-            <div class="post-card-text">
-                <h2>{{ post.title }}</h2>
-                <p>
-                    <span style="float: left;">{{ post.author }} {{ post.created_at }} </span>
-                    <span style="float: right;;">
-                        {% for tag in post.tags.all %}
-                            <span class="tag">#{{ tag.name }}   </span>
-                        {% endfor %}
-                        <i class="fa-solid fa-heart"></i>   {{post.thumbs_up}} 
-                        <i class="fa-solid fa-eye"></i>   {{post.view_count}} 
-                        <i class="fa-solid fa-comment"></i>   {{post.comment_count}} 
-                    </span> 
-                </p>    
+    <div style="text-align: right;margin-top: 10px;">
+        <form class="layui-form layui-input-inline" action="" >
+            <div class="layui-input-inline">
+                <input type="text" name="search" placeholder="请输入关键词" autocomplete="off" class="layui-input">
             </div>
-        </a>
-        <script>
-            fetch('/api/proxy_get_index_photo', { method: 'GET' })
-            .then(function(response) {
-                if (response.ok) {
-                    // 获取代理的图片数据
-                    return response.blob();
-                } else {
-                    console.log('Error:', response.statusText);
-                }
-            })
-            .then(function(imageBlob) {
-                if (imageBlob) {
-                    // 创建URL对象，用于显示图片
-                    const imageUrl = URL.createObjectURL(imageBlob);
-
-                    // 修改原始代码，将图片设置为背景
-                    var postID='{{ post.id|escapejs }}'
-                    var cardElement = document.getElementById("post-" + postID);
-                    cardElement.style.backgroundImage = "url('" + imageUrl + "')";
-                }
-            })
-            .catch(function(error) {
-                console.log('Error:', error);
-            });
-            </script>
-        {% endfor %}
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+            </div>
+        </form>
+        <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-primary layui-btn-radius article-choose">
+                <span>文章筛选</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="post-list" id="post-list">
+        <!-- 这里放文章的列表卡片-->
     </div>
 </div>
 <script>
+var article_list = []
+axios.get('/api/apiGetAllArticles')
+.then(function (response) {
+    reloadArticleCard(response)
+})
+.then(function(){
+    showPostImage()
+})
+.catch(function (error) {
+    console.log(error);
+});
+</script>
+<script>
+function reloadArticleCard(response) {
+        article_list = response.data.data
+        console.log(article_list)
+        const mainContainer =document.getElementById("post-list")
+        function createArticleCard(article) {
+            const card = document.createElement("a");
+            card.className = "post-card";
+            card.href = "/post?id=" + article.id
+            const imgDiv = document.createElement("div");
+            imgDiv.className = "post-card-img";
+            imgDiv.id = "post-" + article.id;
+            // 设置图片样式或内容，根据需要自行添
+            const textDiv = document.createElement("div");
+            textDiv.className = "post-card-text";
+            let addHtml= "<h2>" + article.title + "</h2><p>" +
+                "<span style='float: left;'>" + article.author + " " + article.created_at + "</span>" +
+                "<span style='float: right;'>"
+            if (article.tags__name!= null){
+                article.tags__name.forEach(function(tag) {
+                    addHtml += "<span class='tag'>#" + tag + "</span>";
+                });
+            }
+            addHtml+= "<i class='fa-solid fa-heart'></i> " + "       "+article.thumbs_up+"       " +
+                "<i class='fa-solid fa-eye'></i> " + "       "+article.view_count+"       " +
+                "<i class='fa-solid fa-comment'></i> " + "       "+article.comment_count+"       "+"</span></p>";
+            textDiv.innerHTML=addHtml;
+            card.appendChild(imgDiv);
+            card.appendChild(textDiv)
+            return card;
+        }
+        article_list.forEach(article => {
+        const articleCard = createArticleCard(article);
+        mainContainer.appendChild(articleCard);
+        }); 
+    }
+function showPostImage(){
+        article_list.forEach(article => {
+            axios.get('/api/proxy_get_index_photo',{ responseType: 'blob' })
+            .then(function(response) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const imageData = reader.result;
+                    var cardElement = document.getElementById("post-" + article.id);
+                    cardElement.style.backgroundImage = `url(${imageData})`;
+                };
+                reader.readAsDataURL(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        });
+    }
 var tag_data
 function fetchData() {
   return new Promise((resolve, reject) => {
     // 发起Ajax请求
-    $.ajax({
-      url: '/api/get_alltags',
-    type: 'get',
-    dataType:"json",
-      success: function(response) {
-        tag_data = JSON.parse(response);
-        resolve(); // 标志请求成功
-      },
-      error: function(xhr, status, error) {
-        reject(error); // 标志请求失败
-      }
+    axios.get('/api/get_alltags')
+    .then(function(response) {
+        tag_data = response.data.data
+        resolve()
+    })
+    .catch(function(error) {
+        reject(error)
     });
-  });
+});
 }
 fetchData()
   .then(() => {
@@ -78,7 +109,6 @@ fetchData()
     var dropdown = layui.dropdown;
       // 渲染
       dropdown.render({
-        
         elem: '.article-choose', // 绑定元素选择器，此处指向 class 可同时绑定多个元素
         data: [{
           title: '默认排序',
@@ -111,72 +141,46 @@ fetchData()
             }else{
                 tar_id = obj.id
             }
-            $.ajax({
-                    url: '/api/filter_articles',
-                    type: 'get',
-                    data: {tag_id: tar_id},
-                    success: function(data) {
-                        article_list = JSON.parse(data);
-                        console.log(article_list)
-                        html=join_html(article_list)
-                        // 更新 post 的内容
-                        $('.post-list').html(html);
-                    }
-                });
+            axios.get('/api/filter_articles',{params:{tag_id:tar_id}})
+            .then(function(response){
+                // 清空html内容
+                $('.post-list').html('');
+                reloadArticleCard(response)
+                article_list = response.data.data
+                console.log(article_list)
+            })
+            .then(function(){
+                showPostImage()
+            })
+            .catch(function(error){
+                console.log(error)
+            })
         }
-      });
-        }
-  )});
-function join_html(data){
-    var html = '';
-    for (var i = 0; i < article_list.length; i++) {
-        var data = article_list[i];
-        html += '<a href="/post?id=' + data.id + '" class="post-card">';
-        html += '<div class="post-card-img" id="post-' + data.id + '"></div>';
-        html += '<div class="post-card-text">';
-        html += '<h2>' + data.title + '</h2>';
-        html += '<p>';
-        html += '<span style="float: left;">' + data.author + ' ' + data.created_at + '</span>';
-        html += '<span style="float: right;">';
-            for (var j = 0; j < data.tags__name.length; j++) {
-                if (tag__name != null) {
-                    var tag__name = data.tags__name[j];
-                html += '<span class="tag">#' + tag__name + '\t</span>';
-                }
-            }
-            
-        html += '<i class="fa-solid fa-heart"></i>\t'+data.thumbs_up + '\t';
-        html += '<i class="fa-solid fa-eye"></i>\t' +data.view_count + '\t';
-        html += '<i class="fa-solid fa-comment"></i>'+data.comment_count + '\t';
-        html += '</span></p></div></a>';
-        html += `
-        <script>
-        fetch('/api/proxy_get_index_photo', { method: 'GET' })
-        .then(function(response) {
-            if (response.ok) {
-                // 获取代理的图片数据
-                return response.blob();
-            } else {
-                console.log('Error:', response.statusText);
-            }
+    });
+    })
+  });
+</script>
+<script>
+  layui.use('form', function(){
+    var form = layui.form;
+    // 监听表单提交事件
+    form.on('submit(search)', function(data){
+        var keyword = data.field.search;
+        console.log("搜索关键词：" + keyword);
+        axios.get('/api/search_articles',{params:{keyword:keyword}})
+        .then(function(response){
+            $('.post-list').html('');
+            reloadArticleCard(response)
+            article_list = response.data.data
         })
-        .then(function(imageBlob) {
-            if (imageBlob) {
-                // 创建URL对象，用于显示图片
-                const imageUrl = URL.createObjectURL(imageBlob);
-
-                // 修改原始代码，将图片设置为背景
-                var postID=`+ data.id +
-                `;var cardElement = document.getElementById("post-" + postID);
-                cardElement.style.backgroundImage = "url('" + imageUrl + "')";
-            }
+        .then(function(){
+            showPostImage()
         })
-        .catch(function(error) {
-            console.log('Error:', error);
-        });
-        <\/script>`;
-    }
-    return html;
-}
+        .catch(function(error){
+            console.log(error)
+        })
+        return false;
+    });
+  });
 </script>
 {% endblock %}

@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
 from .forms import UserLoginForm
 from my_settings import *

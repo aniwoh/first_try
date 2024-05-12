@@ -16,8 +16,9 @@
     <!--cdn引用showdown进行解析-->
     <script src="https://cdn.bootcdn.net/ajax/libs/showdown/2.1.0/showdown.js"></script>
     <link href="//unpkg.com/layui@2.9.7/dist/css/layui.css" rel="stylesheet">
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
-    <script src="//unpkg.com/layui@2.9.7/dist/layui.js"></script> 
+    <script src="//unpkg.com/layui@2.9.7/dist/layui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
 </head>
 
@@ -52,11 +53,11 @@
                 </li>
                 <li>
                     <i class="fa-solid fa-clock"></i>
-                    <span>Archive</span>
+                    <span><a href="">Archive</a></span>
                 </li>
                 <li>
                     <i class="fa-solid fa-user"></i>
-                    <span>Accounts</span>
+                    <span><a href="">Accounts</a></span>
                 </li>
                 <li>
                     <i class="fa-solid fa-filter"></i>
@@ -82,13 +83,9 @@
 <script>
     var currentPage = window.location.pathname;
     var listItems = document.querySelectorAll('.list li');
-    // Loop through each list item
     listItems.forEach(function(item) {
-        // Get the link URL of the list item
         var link = item.querySelector('a').getAttribute('href');
-        // Check if the link URL matches the current page URL
         if (link === currentPage) {
-            // Add the "active" class to the list item
             item.classList.add('active');
         }
     });
