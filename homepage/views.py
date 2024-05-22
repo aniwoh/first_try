@@ -8,6 +8,7 @@ from django.urls import reverse
 
 User = get_user_model()
 
+# 以下为页面跳转函数
 @login_required
 def home(request):
     content={
@@ -49,6 +50,7 @@ def setting(request):
     }
     return render(request,'homepage/setting.html',content)
 
+# 以下为API函数 
 @login_required
 def upload_view(request):
     if request.method == 'POST':
@@ -83,7 +85,7 @@ def upload_view(request):
     return redirect('/homepage/list')
 
 @login_required
-def get_markdown_json_api(request):
+def getAllArticleByLevel(request):
     current_user_level = request.user.level
     if current_user_level==6: # 为超级管理员
         markdown=MarkdownFilePool.objects.all().values('id','title','author','content','created_at','comment_count','view_count','thumbs_up')
@@ -103,18 +105,18 @@ def get_markdown_json_api(request):
         i['tags']=tag_list
         markdown_list.append(i)
     markdown_dict={'code':0,'msg':'','count':len(markdown),'data':markdown_list}
-    # user_json_data = json.dumps(user_dict)
     return JsonResponse(markdown_dict)
 
+# 按照文章id删除文章
 @login_required
-def delete_article(request):
-    print(request.POST['id'])
-    article_id = request.POST['id']
+def deleteArticleById(request):
+    article_id = json.loads(request.body).get('id')
     MarkdownFilePool.objects.filter(id=article_id).delete()
-    return redirect('/homepage/list')
+    return JsonResponse({'code':0,'msg':'success','data':{}})
 
+# 按照文章id编辑文章
 @login_required
-def edit(request):
+def editArticleById(request):
     data_id = request.GET['id']
     post=MarkdownFilePool.objects.filter(id=data_id)
     tags = Tag.objects.all()

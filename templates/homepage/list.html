@@ -59,7 +59,7 @@ layui.use(['table', 'dropdown'], function(){
   
   table.render({
     elem: '#markdownall',
-    url: './get_markdown_json',
+    url: './getAllArticleByLevel',
     height: 'full-50', // 最大高度减去其他容器已占有的高度差
     cellMinWidth: 80,
     page: true,
@@ -108,23 +108,20 @@ layui.use(['table', 'dropdown'], function(){
             window.location.href = '/post?id='+data.id;
           } else if(menudata.id === 'del'){
             layer.confirm('真的删除行 [id: '+ data.id +'] 么', function(index){
-              obj.del(); // 删除对应行（tr）的DOM结构
               layer.close(index);
-              // 向服务端发送删除指令
-              $.ajax({
-                url: './delete_article',
-                type: 'POST',
-                data: { 
-                    id: data.id,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'  
-                },
-                success: function(response) {
-                    layer.msg('删除id:'+ data.id+'成功');
-                },
-                error: function(xhr, status, error) {
-                    layer.msg('删除id:'+ data.id+'失败');
+              axios.post('./deleteArticleById', {
+                id: data.id,
+                },{headers: {
+                  'X-CSRFToken': '{{ csrf_token }}'}
+                })
+              .then(function (response) {
+                if(response.data.code === 0){
+                  layer.msg('删除id:'+ data.id+'成功');
+                  obj.del();
+                } else {
+                  layer.msg('删除id:'+ data.id+'失败');
                 }
-            });
+              })
             });
             }
         },
@@ -163,7 +160,6 @@ layui.use(['table', 'dropdown'], function(){
     'add-new-tag': function(){
       layer.prompt({title: '请输入新标签名'}, function(value, index, elem){
         if(value === '') return elem.focus();
-        // layer.msg('获得：'+ util.escape(value)); // 显示 value
         if(!isNaN(util.escape(value))) return layer.msg('标签不合法，不允许使用纯数字标签')
         // 创建 checkbox 元素
         var checkbox = document.createElement('input');
@@ -171,20 +167,14 @@ layui.use(['table', 'dropdown'], function(){
         checkbox.name = 'tags';
         checkbox.value = util.escape(value);
         checkbox.title = util.escape(value);
-        // 添加 checkbox 元素到 DOM
         var container = document.getElementById('tag-checkbox');
         container.appendChild(checkbox);
-
-        // 渲染 checkbox 元素
         form.render('checkbox');
-
-        // 关闭 prompt
         layer.close(index);
       });
     },
   })
 });
-</script>
 </script>
 </body>
 </html>

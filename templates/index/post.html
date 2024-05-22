@@ -98,7 +98,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
     // 通过id获取文章的json对象
-    axios.get(`/api/get_article`,{params:{id:id}})
+    axios.get(`/api/getArticleById`,{params:{id:id}})
     .then(response => {
         const article = response.data.data;
         console.log(article);
@@ -166,16 +166,10 @@ layui.use(function(){
             formData.append('belong_to_comment', belongToComment);
             formData.append('repeatSomeone', repeatSomeone);
             var csrftoken = document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
-            fetch('/post_comment', {
-                method: 'POST',
-                body: formData,
+            axios.post('/post_comment',formData,{
                 headers: {
                     'X-CSRFToken': csrftoken
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
             })
             .catch(error => {
                 console.error(error);

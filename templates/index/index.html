@@ -25,7 +25,7 @@
 </div>
 <script>
 var article_list = []
-axios.get('/api/apiGetAllArticles')
+axios.get('/api/getAllArticles')
 .then(function (response) {
     reloadArticleCard(response)
 })
@@ -35,8 +35,6 @@ axios.get('/api/apiGetAllArticles')
 .catch(function (error) {
     console.log(error);
 });
-</script>
-<script>
 function reloadArticleCard(response) {
         article_list = response.data.data
         console.log(article_list)
@@ -87,10 +85,12 @@ function showPostImage(){
             });
         });
     }
+</script>
+<script>
 var tag_data
 function fetchData() {
   return new Promise((resolve, reject) => {
-    axios.get('/api/get_alltags')
+    axios.get('/api/getAllTags')
     .then(function(response) {
         tag_data = response.data.data
         resolve()
@@ -138,7 +138,7 @@ fetchData()
             }else{
                 tar_id = obj.id
             }
-            axios.get('/api/filter_articles',{params:{tag_id:tar_id}})
+            axios.get('/api/filterArticles',{params:{tag_id:tar_id}})
             .then(function(response){
                 // 清空html内容
                 $('.post-list').html('');
@@ -164,7 +164,7 @@ fetchData()
     form.on('submit(search)', function(data){
         var keyword = data.field.search;
         console.log("搜索关键词：" + keyword);
-        axios.get('/api/search_articles',{params:{keyword:keyword}})
+        axios.get('/api/searchArticles',{params:{keyword:keyword}})
         .then(function(response){
             $('.post-list').html('');
             reloadArticleCard(response)

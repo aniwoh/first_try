@@ -10,7 +10,7 @@ urlpatterns = [
     path('setting',views.setting,name='setting'),
     path('', RedirectView.as_view(url='home')),
     path('upload/', views.upload_view, name='upload'),
-    path('get_markdown_json/', views.get_markdown_json_api, name='get_markdown_json'),
-    path('delete_article', views.delete_article, name='delete_article'),
-    path('edit', views.edit, name='edit'),
+    path('getAllArticleByLevel/', views.getAllArticleByLevel, name='getAllArticleByLevel'),
+    path('deleteArticleById', views.deleteArticleById, name='deleteArticleById'),
+    path('edit', views.editArticleById, name='edit'),
 ]

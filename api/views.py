@@ -18,23 +18,10 @@ class ComplexEncoder(json.JSONEncoder):
         else:
             return json.JSONEncoder.default(self, obj)
 
-def proxyGetCardImage(request):
-    # 构建API请求的URL，要求该api返回的结果是一个图片
-    api_url = "https://t.mwm.moe/pc"
-    response = requests.get(api_url)
-    # 检查请求是否成功
-    if response.status_code == 200:
-        image_data = response.content
-        response = HttpResponse(image_data, content_type="image/jpeg")
-        response['Content-Disposition'] = 'attachment; filename="random_image.jpg"'
-        return response
-    else:
-        return JsonResponse({'error': 'API request failed'}, status=500)
-
 def getAllArticles(request):
     return get_article(-1)
 
-def getArticle(request):
+def getArticleById(request):
     article_id=request.GET.get('id')
     article =MarkdownFilePool.objects.get(id=article_id)
     articleDict=model_to_dict(article)
