@@ -83,9 +83,14 @@ def searchArticles(request):
     article_list=articleHelper(articles)
     data={'code':0,'msg':'','data':article_list}
     return JsonResponse(data)
+
 @login_required
-def api_get_user_json(request):
-    users=User.objects.all().values('username','is_superuser','date_joined','id','level')
+def getAllUserByLevel(request):
+    current_user_level = request.user.level
+    if current_user_level==6: # 为超级管理员
+        users=User.objects.all().values('username','is_superuser','date_joined','id','level')
+    else:
+        users=User.objects.filter(username=request.user.username).values('username','is_superuser','date_joined','id','level')
     users_list=[]
     for i in users:
         i['date_joined']=i['date_joined'].strftime('%Y-%m-%d %H:%M:%S')
