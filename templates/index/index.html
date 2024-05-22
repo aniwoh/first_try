@@ -74,15 +74,13 @@ function reloadArticleCard(response) {
     }
 function showPostImage(){
         article_list.forEach(article => {
-            axios.get('/api/proxy_get_index_photo',{ responseType: 'blob' })
+            axios.get('https://t.mwm.moe/pc',{ responseType: 'blob' })
             .then(function(response) {
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    const imageData = reader.result;
-                    var cardElement = document.getElementById("post-" + article.id);
-                    cardElement.style.backgroundImage = `url(${imageData})`;
-                };
+                let reader = new FileReader();
                 reader.readAsDataURL(response.data);
+                reader.onload = function() {
+                    document.querySelector('#post-'+article.id).style.backgroundImage = `url(${reader.result})`;
+                };
             })
             .catch(error => {
                 console.log(error);
