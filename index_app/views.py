@@ -10,8 +10,6 @@ def post(request):
         now_id=1
         return redirect(reverse('post') + '?id=1')
     markdown = MarkdownFilePool.objects.get(id=now_id)  # 获取第一个Markdown文件
-    prev_record = MarkdownFilePool.objects.filter(id__lt=markdown.id).last()
-    next_record = MarkdownFilePool.objects.filter(id__gt=markdown.id).first()
 
     markdown.view_count+=1
     markdown.save()
@@ -20,8 +18,6 @@ def post(request):
     child_comments=Comments.objects.filter(article_id=now_id,belong_to_comment__gt=0)
     context = {
         'markdown': markdown,
-        'prev_record': prev_record,
-        'next_record': next_record,
         'root_comments':root_comments,
         'child_comments':child_comments,
         'tags':markdown.tags.all(),
