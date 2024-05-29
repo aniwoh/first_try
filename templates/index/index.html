@@ -141,7 +141,9 @@ fetchData()
             axios.get('/api/filterArticles',{params:{tag_id:tar_id}})
             .then(function(response){
                 // 清空html内容
-                $('.post-list').html('');
+                document.querySelectorAll('.post-list').forEach(function(element) {
+                    element.innerHTML = '';
+                });
                 reloadArticleCard(response)
                 article_list = response.data.data
                 console.log(article_list)
